@@ -1,0 +1,72 @@
+body {
+    margin:0;
+    padding:0;
+    font-family: 'Roboto Slab';
+}
+
+.navbar-nav {
+    font-size:22px;
+}
+
+.navbar-nav li a {
+    padding:20px;
+}
+
+.navbar {
+    margin: 0;
+}
+
+.title {
+    background-image: url('/static/blackboard.jpg');
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: center;
+    background-size: cover;
+    height: 850px;
+    color: #fff;
+    padding-top:230px;
+}
+
+.navbar-brand {
+    margin-top: 5px;
+    color:#ffffff;
+    font-size:30px;
+}
+
+.footer {
+    width: 100%;
+    background-color: #666677;
+    padding: 15px;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+/*.container-fluid {*/
+/*    width: 80%;*/
+/*}*/
+
+.title-text p {
+    margin: 0;
+    font-size:45px;
+}
+
+h1 {
+    font-size: 85px;
+}
+
+h2 {
+    text-align: center;
+    font-weight: 100;
+}
+.about {
+    font-family: 'Roboto';
+    text-align: center;
+}
+
+.divider-line {
+    margin:0 20px;
+    background-color: #d8d827;
+    height: 5px;
+    width: 40px;
+
+}
