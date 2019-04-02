@@ -7,34 +7,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/static/main.css" type="text/css">
     <title>Project Logos</title>
 </head>
 <body>
-<div class="header">
-    <nav class="navbar navbar-inverse">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">Project Logos</a>
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Create a test</a></li>
-                    <li><a href="#">Pass a test</a></li>
-                    <li><a href="#">Support</a></li>
-                    <li><a href="#">Donate us</a></li>
-                </ul>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">Project Logos</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Disabled</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
         </div>
-    </nav>
+    </div>
+</nav>
+<div class="header">
     <div class="text-center title">
         <div class="title-text">
             <p>Welcome to</p>
@@ -42,8 +62,9 @@
             <div class="title-divider-line"></div>
         </div>
     </div>
-
 </div>
+
+
 <div class="main_body">
     <div class="body-block">
         <div class="container">
@@ -62,19 +83,39 @@
     </div>
     <div class="body-block grey-back">
         <div class="container">
-            <h2>Our Services</h2>
-            <div class="divider-line"></div>
-            <div class="service">
-                <h3>Create a test</h3>
-                <p>Here you can simply create a test</p>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2>Our Services</h2>
+                    <div class="divider-line"></div>
+                </div>
             </div>
-            <div class="service">
-                <i class="fas fa-pencil-alt"></i>
-                <h3>Pass a test</h3>
+            <div class="row">
+                <div class="col-sm-5 service">
+                    <a href="#">
+                        <div class="service-container">
+                            <i class="fas fa-plus-square"></i>
+                            <h3>Create a test</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                                ut
+                                labore
+                                et dolore magna aliqua. Habitasse platea dictumst quisque sagittis purus sit.</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="service col-sm-5">
+                    <a href="#">
+                        <div class="service-container">
+                            <i class="fas fa-pencil-alt"></i>
+                            <h3>Pass a test</h3>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Habitasse platea dictumst quisque sagittis purus sit.
-                    ipsum a</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                                ut
+                                labore
+                                et dolore magna aliqua. Habitasse platea dictumst quisque sagittis purus sit.
+                                ipsum a</p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
