@@ -8,6 +8,13 @@ body {
     font-size:22px;
 }
 
+p {
+    font-size: 20px;
+    font-family: "Roboto";
+    font-weight: 100;
+    text-align: center;
+}
+
 .navbar-nav li a {
     padding:20px;
 }
@@ -19,7 +26,7 @@ body {
 .title {
     background-image: url('/static/blackboard.jpg');
     background-repeat: no-repeat;
-    background-attachment: scroll;
+    background-attachment: fixed;
     background-position: center;
     background-size: cover;
     height: 850px;
@@ -58,15 +65,59 @@ h2 {
     text-align: center;
     font-weight: 100;
 }
-.about {
+
+.body-block {
     font-family: 'Roboto';
-    text-align: center;
+    object-position: center;
+    padding-top: 100px;
+    padding-bottom: 150px;
 }
 
 .divider-line {
-    margin:0 20px;
+    margin:35px auto;
     background-color: #d8d827;
-    height: 5px;
-    width: 40px;
+    height: 4px;
+    width: 50px;
 
 }
+
+.title-divider-line {
+    max-width: 600px;
+    background-color: #fff;
+    height: 2px;
+    margin: 30px auto;
+}
+
+.grey-back {
+    background-color: #485F6E;
+    color: #fff;
+}
+
+h3 {
+    text-align: center;
+    font-size:50px;
+    width: 70%;
+    margin: auto auto;
+    display: inline-block;
+}
+
+.service i {
+    margin: 10px;
+    font-size: 80px;
+
+}
+
+.service {
+    display: inline-block;
+    width: 40%;
+    border: 1px solid #FFF;
+    margin: 4.9%;
+    padding: 10px;
+}
+
+.service p {
+    font-weight: 100;
+    margin-top: 20px;
+    padding: 5px;
+}
+
