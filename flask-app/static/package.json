@@ -1,0 +1,66 @@
+{
+  "name": "static",
+  "version": "1.0.0",
+  "dependencies": {
+  },
+  "question_1": {
+    "id": 1,
+    "category": "Algebra",
+    "choices": [
+      "2.5",
+      "2",
+      "2.25",
+      "3",
+      "8"
+    ],
+    "correct_choice": 2,
+    "instruction": "Solve for x",
+    "question": "$$\\iiint_V \\mu(u,v,w) \\,du\\,dv\\,dw$$",
+    "topic": "Linear Equations"
+  },
+  "question_2": {
+    "id": 2,
+    "category": "Algebra",
+    "choices": [
+      "2.5",
+      "2",
+      "2.25",
+      "3",
+      "8"
+    ],
+    "correct_choice": 2,
+    "instruction": "Solve for x",
+    "question": "10 - 2x = 5",
+    "topic": "Linear Equations"
+  },
+  "question_3": {
+    "id": 3,
+    "category": "Algebra",
+    "choices": [
+      "15",
+      "02",
+      "20.25",
+      "35",
+      "88"
+    ],
+    "correct_choice": 2,
+    "instruction": "Solve for x",
+    "question": "10 - 5x = 3",
+    "topic": "Linear Equations"
+  },
+  "question_4": {
+    "id": 4,
+    "category": "Algebra",
+    "choices": [
+      "x = 2.5",
+      "x = 2",
+      "x = 2.25",
+      "x = 3",
+      "x = 8"
+    ],
+    "correct_choice": 2,
+    "instruction": "Solve for x",
+    "question": "10 - 2x = 5",
+    "topic": "Linear Equations"
+  }
+}
