@@ -136,3 +136,21 @@ h3 {
     text-decoration: none;
 }
 
+img {
+    border-radius: 50%;
+    width: 100%;
+}
+
+#team p {
+    text-align: left;
+}
+
+#team .col-sm-3, .col-sm-9 {
+    margin-top: 150px;
+}
+
+h4 {
+    text-align: center;
+    font-family: 'Roboto Slab';
+}
+
