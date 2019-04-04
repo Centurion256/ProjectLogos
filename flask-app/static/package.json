@@ -7,15 +7,15 @@
     "id": 1,
     "category": "Algebra",
     "choices": [
-      "2.5",
+      "1",
       "2",
       "2.25",
       "3",
       "8"
     ],
-    "correct_choice": 2,
+    "correct_choice": 0,
     "instruction": "Solve for x",
-    "question": "$$\\iiint_V \\mu(u,v,w) \\,du\\,dv\\,dw$$",
+    "question": "$$10x - 2 = 8$$",
     "topic": "Linear Equations"
   },
   "question_2": {
@@ -28,39 +28,39 @@
       "3",
       "8"
     ],
-    "correct_choice": 2,
+    "correct_choice": 0,
     "instruction": "Solve for x",
-    "question": "10 - 2x = 5",
+    "question": "$$10 - 2x = 5$$",
     "topic": "Linear Equations"
   },
   "question_3": {
     "id": 3,
     "category": "Algebra",
     "choices": [
-      "15",
-      "02",
-      "20.25",
-      "35",
-      "88"
+      "1.5",
+      "2",
+      "2.5",
+      "2.25",
+      "2.75"
     ],
     "correct_choice": 2,
     "instruction": "Solve for x",
-    "question": "10 - 5x = 3",
+    "question": "$$\\frac{5}{x} = 2$$",
     "topic": "Linear Equations"
   },
   "question_4": {
     "id": 4,
     "category": "Algebra",
     "choices": [
-      "x = 2.5",
-      "x = 2",
-      "x = 2.25",
-      "x = 3",
-      "x = 8"
+      "$$\\frac{8}{2}$$",
+      "$$\\frac{9}{2}$$",
+      "$$\\frac{8}{3}$$",
+      "$$\\frac{10}{3}$$",
+      "3"
     ],
     "correct_choice": 2,
     "instruction": "Solve for x",
-    "question": "10 - 2x = 5",
+    "question": "$$\\int_{0}^{2}x^2dx$$",
     "topic": "Linear Equations"
   }
 }
