@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+{% block body %}
+<script>
+    // Warning before leaving the page (back button, or outgoinglink)
+    window.onbeforeunload = function() {
+        return "Do you really want to leave our brilliant application?";
+        //if we return nothing here (just calling return;) then there will be no pop-up question at all
+        //return;
+    };
+</script>
+
+
+<script>
+    counter = 0;
+    proceeded = [];
+</script>
+<script>
+    function insert_new_question() {
+        var question;
+        var container_block;
+
+        question = document.createElement('INPUT');
+        question.setAttribute("type", "text");
+        question.setAttribute("id", counter);
+        counter = counter + 1;
+
+        container_block = document.getElementById('test_creation');
+        container_block.appendChild(question);
+    }
+
+    function add_multiple_choice(id, number) {
+        var variant;
+        var question_to_add;
+        var answer_to_question;
+
+        question_to_add = document.getElementById("0");
+        for (i = 0; i < number; i++) {
+            variant = document.createElement('INPUT');
+            variant.setAttribute("name", "question_" + id + "_" + i);
+            question_to_add.appendChild(variant);
+        }
+        answer_to_question = document.createElement('label');
+        answer_to_question.setAttribute("for", "right_answer_" + id);
+        var input = document.createElement('INPUT');
+        input.setAttribute('name', "right_answer_" + id);
+        input.setAttribute('id', "right_answer_" + id);
+        var text = document.createTextNode("Number of right answer:");
+        answer_to_question.appendChild(text);
+        question_to_add.appendChild(answer_to_question);
+        question_to_add.appendChild(input);
+    }
+
+    function proceed_type(id) {
+        if (id  in proceeded) {
+            return;
+        }
+        proceeded.push(id);
+        var field_to_get_type = document.getElementsByName("type_" + id)[0];
+        var tipe = field_to_get_type.value;
+        if (tipe == 'Multiple choice') {
+            add_multiple_choice(id, 3)
+        }
+    }
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Create new test</h2>
+            <form id="test_creation">
+                <div class="question" id="0">
+                    <label for="question_0">Question:</label><input type="text" id="question_0" name="question_0">
+                    <label for="task_0">Task:</label><input type="text" id="task_0" name="task_0">
+                    <div class="question-type">
+                        <label> Type of the question:
+                            <select name="type_0" class="type_0">
+
+                                <option value="Multiple choice">Multiple choice</option>
+                                <option value="Written answer">Written answer</option>
+                            </select>
+                        </label>
+                        <button type="button" onclick="proceed_type(0)">Proceed type</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <button class="btn btn-outline-warning" onclick="insert_new_question()">Insert new question</button>
+    <br>
+    <br>
+    <div class="submission-button">
+        <button class="submit btn btn-outline-warning" onclick="submit_test()">Submit the test</button>
+    </div>
+    <script>
+        function submit_test() {
+            document.getElementById("test_creation").submit();
+        }
+    </script>
+</div>
+{% endblock %}

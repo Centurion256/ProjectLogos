@@ -310,3 +310,49 @@ h4 {
 .chechmark-disabled-right {
     background-color: #00cc00;
 }
+
+#test_creation input {
+    width: 95%;
+    margin: 10px;
+    padding: 5px;
+    border: 1px solid #aaaaaa;
+    border-radius: 5px;
+}
+
+#test_creation label {
+    margin: 10px;
+}
+
+#test_creation button {
+    margin: 10px;
+}
+
+#test-creation option {
+    width: 100%;
+}
+
+.question-type {
+    width: 100%;
+}
+
+select {
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: none;
+    padding: 5px 10px;
+    font-size: 18px;
+    border: 2px solid #cccccc;
+}
+
+.submission-button {
+    text-align: center;
+    width: 100%;
+}
+
+.submission-button button {
+    font-size: 25px;
+    padding: 5px;
+    color: #000000;
+    border-radius: 10px;
+    border-width: 2px;
+}

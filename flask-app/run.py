@@ -1,8 +1,5 @@
 from flask import Flask, render_template, Markup, request
 from my_modules.parse_test_file import questions_generator, questions_answer_generator
-from config import Config
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 app = Flask(__name__)
 
 
@@ -17,7 +14,7 @@ def donate():
 @app.route("/pass")
 def test_pass():
     questions = Markup("".join(i for i in questions_generator("package.json")))
-    return render_template("test.html", answer=questions)
+    return render_template("test.html", answer=questions, button=True)
 
 @app.route("/submit_test", methods=["POST"])
 def submitting():
@@ -32,7 +29,11 @@ def submitting():
     questions = ""
     answer_num = 0
     questions = Markup("".join(i for i in questions_answer_generator("package.json", answered)))
-    return render_template("test.html", answer=questions)
+    return render_template("test.html", answer=questions, button=False)
+
+@app.route("/create_test")
+def test_creation():
+    return render_template("test_creation.html")
 
 
 if __name__ == "__main__":
