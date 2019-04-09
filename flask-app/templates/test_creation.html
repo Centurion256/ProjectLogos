@@ -11,7 +11,7 @@
 
 
 <script>
-    counter = 0;
+    counter = 1;
     proceeded = [];
 </script>
 <script>
@@ -19,21 +19,40 @@
         var question;
         var container_block;
 
-        question = document.createElement('INPUT');
-        question.setAttribute("type", "text");
+        question = document.createElement('div');
         question.setAttribute("id", counter);
-        counter = counter + 1;
+        question.setAttribute("class", "question_block");
+        var id = counter;
+        question.innerHTML="<label class=\"question_field\" for=\"question_" + id + "\">Question " + id + ": </label><input type=\"text\" id=\"question_" + id + "\" name=\"question_0\">\n" +
+            "                    <label for=\"task_" + id + "\">Task:</label><input type=\"text\" id=\"task_" + id + "\" name=\"task_0\">\n" +
+            "                    <div id='choose_question_type_" + id + "'   class=\"question-type\">\n" +
+            "                        <label> Type of the question:\n" +
+            "                            <select name=\"type_" + id + "\" class=\"type_" + id + "\">\n" +
+            "\n" +
+            "                                <option value=\"Multiple choice\">Multiple choice</option>\n" +
+            "                                <option value=\"Written answer\">Written answer</option>\n" +
+            "                            </select>\n" +
+            "                        </label>\n" +
+            "                        <button type=\"button\" id=\"button_submit_" + id + "\"  onclick=\"proceed_type(" + id + ")\">Proceed type</button>\n" +
+            "                    </div>";
 
+
+
+        counter = counter + 1;
         container_block = document.getElementById('test_creation');
         container_block.appendChild(question);
     }
 
-    function add_multiple_choice(id, number) {
+    function add_multiple_choice(id) {
         var variant;
         var question_to_add;
         var answer_to_question;
+        var number = document.getElementById("number_of_choices_" + id).value;
 
-        question_to_add = document.getElementById("0");
+        question_to_add = document.getElementById(id);
+        var text_to_add = document.createElement("p");
+        text_to_add.appendChild(document.createTextNode("Enter answer variants: "));
+        question_to_add.appendChild(text_to_add);
         for (i = 0; i < number; i++) {
             variant = document.createElement('INPUT');
             variant.setAttribute("name", "question_" + id + "_" + i);
@@ -48,18 +67,48 @@
         answer_to_question.appendChild(text);
         question_to_add.appendChild(answer_to_question);
         question_to_add.appendChild(input);
+        var button_submit = document.getElementById("button_submit_number_" + id);
+        var input_number_field = document.getElementById("for_button_submit_number_" + id);
+        question_to_add.removeChild(button_submit);
+        question_to_add.removeChild(input_number_field);
+
     }
 
     function proceed_type(id) {
-        if (id  in proceeded) {
-            return;
-        }
-        proceeded.push(id);
+        var block_to_delete = document.getElementById("choose_question_type_" + id);
+
         var field_to_get_type = document.getElementsByName("type_" + id)[0];
-        var tipe = field_to_get_type.value;
-        if (tipe == 'Multiple choice') {
-            add_multiple_choice(id, 3)
+        var current_question = document.getElementById(id);
+        var type = field_to_get_type.value;
+        current_question.removeChild(block_to_delete);
+        if (type == 'Multiple choice') {
+            proceed_multiple_choice(id);
         }
+
+        current_question.removeChild(field_to_get_type);
+    }
+
+    function proceed_multiple_choice(id) {
+        var object_to_insert = document.getElementById(id);
+        var input = document.createElement("INPUT");
+        input.setAttribute("id", "number_of_choices_" + id);
+        input.setAttribute("name", "number_of_choices_" + id);
+        label = document.createElement("label");
+        label.setAttribute("for", "number_of_choices_" + id);
+        label.setAttribute("id", "for_button_submit_number_" + id);
+        text = document.createTextNode("Number of choices: ");
+        label.appendChild(text);
+        label.appendChild(input);
+        var button = document.createElement("button");
+        var button_text = document.createTextNode("Submit");
+        button.appendChild(button_text);
+        button.setAttribute("id", "button_submit_number_" + id)
+        button.setAttribute("onclick", "add_multiple_choice(" + id  + ")");
+        object_to_insert.appendChild(label);
+        object_to_insert.appendChild(button);
+
+
+
     }
 </script>
 <div class="container">
@@ -67,21 +116,7 @@
         <div class="col-sm-12">
             <h2>Create new test</h2>
             <form id="test_creation">
-                <div class="question" id="0">
-                    <label for="question_0">Question:</label><input type="text" id="question_0" name="question_0">
-                    <label for="task_0">Task:</label><input type="text" id="task_0" name="task_0">
-                    <div class="question-type">
-                        <label> Type of the question:
-                            <select name="type_0" class="type_0">
 
-                                <option value="Multiple choice">Multiple choice</option>
-                                <option value="Written answer">Written answer</option>
-                            </select>
-                        </label>
-                        <button type="button" onclick="proceed_type(0)">Proceed type</button>
-                    </div>
-
-                </div>
             </form>
         </div>
     </div>

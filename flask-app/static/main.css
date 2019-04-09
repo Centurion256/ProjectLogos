@@ -356,3 +356,11 @@ select {
     border-radius: 10px;
     border-width: 2px;
 }
+
+.question_field{
+    font-size: 25px;
+}
+
+.question_block {
+    margin-top: 70px;
+}
