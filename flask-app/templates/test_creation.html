@@ -1,0 +1,135 @@
+{% extends "layout.html" %}
+{% block body %}
+<script>
+    // Warning before leaving the page (back button, or outgoinglink)
+    window.onbeforeunload = function() {
+        return "Do you really want to leave our brilliant application?";
+        //if we return nothing here (just calling return;) then there will be no pop-up question at all
+        //return;
+    };
+</script>
+
+
+<script>
+    counter = 1;
+    proceeded = [];
+</script>
+<script>
+    function insert_new_question() {
+        var question;
+        var container_block;
+
+        question = document.createElement('div');
+        question.setAttribute("id", counter);
+        question.setAttribute("class", "question_block");
+        var id = counter;
+        question.innerHTML="<label class=\"question_field\" for=\"question_" + id + "\">Question " + id + ": </label><input type=\"text\" id=\"question_" + id + "\" name=\"question_0\">\n" +
+            "                    <label for=\"task_" + id + "\">Task:</label><input type=\"text\" id=\"task_" + id + "\" name=\"task_0\">\n" +
+            "                    <div id='choose_question_type_" + id + "'   class=\"question-type\">\n" +
+            "                        <label> Type of the question:\n" +
+            "                            <select name=\"type_" + id + "\" class=\"type_" + id + "\">\n" +
+            "\n" +
+            "                                <option value=\"Multiple choice\">Multiple choice</option>\n" +
+            "                                <option value=\"Written answer\">Written answer</option>\n" +
+            "                            </select>\n" +
+            "                        </label>\n" +
+            "                        <button type=\"button\" id=\"button_submit_" + id + "\"  onclick=\"proceed_type(" + id + ")\">Proceed type</button>\n" +
+            "                    </div>";
+
+
+
+        counter = counter + 1;
+        container_block = document.getElementById('test_creation');
+        container_block.appendChild(question);
+    }
+
+    function add_multiple_choice(id) {
+        var variant;
+        var question_to_add;
+        var answer_to_question;
+        var number = document.getElementById("number_of_choices_" + id).value;
+
+        question_to_add = document.getElementById(id);
+        var text_to_add = document.createElement("p");
+        text_to_add.appendChild(document.createTextNode("Enter answer variants: "));
+        question_to_add.appendChild(text_to_add);
+        for (i = 0; i < number; i++) {
+            variant = document.createElement('INPUT');
+            variant.setAttribute("name", "question_" + id + "_" + i);
+            question_to_add.appendChild(variant);
+        }
+        answer_to_question = document.createElement('label');
+        answer_to_question.setAttribute("for", "right_answer_" + id);
+        var input = document.createElement('INPUT');
+        input.setAttribute('name', "right_answer_" + id);
+        input.setAttribute('id', "right_answer_" + id);
+        var text = document.createTextNode("Number of right answer:");
+        answer_to_question.appendChild(text);
+        question_to_add.appendChild(answer_to_question);
+        question_to_add.appendChild(input);
+        var button_submit = document.getElementById("button_submit_number_" + id);
+        var input_number_field = document.getElementById("for_button_submit_number_" + id);
+        question_to_add.removeChild(button_submit);
+        question_to_add.removeChild(input_number_field);
+
+    }
+
+    function proceed_type(id) {
+        var block_to_delete = document.getElementById("choose_question_type_" + id);
+
+        var field_to_get_type = document.getElementsByName("type_" + id)[0];
+        var current_question = document.getElementById(id);
+        var type = field_to_get_type.value;
+        current_question.removeChild(block_to_delete);
+        if (type == 'Multiple choice') {
+            proceed_multiple_choice(id);
+        }
+
+        current_question.removeChild(field_to_get_type);
+    }
+
+    function proceed_multiple_choice(id) {
+        var object_to_insert = document.getElementById(id);
+        var input = document.createElement("INPUT");
+        input.setAttribute("id", "number_of_choices_" + id);
+        input.setAttribute("name", "number_of_choices_" + id);
+        label = document.createElement("label");
+        label.setAttribute("for", "number_of_choices_" + id);
+        label.setAttribute("id", "for_button_submit_number_" + id);
+        text = document.createTextNode("Number of choices: ");
+        label.appendChild(text);
+        label.appendChild(input);
+        var button = document.createElement("button");
+        var button_text = document.createTextNode("Submit");
+        button.appendChild(button_text);
+        button.setAttribute("id", "button_submit_number_" + id)
+        button.setAttribute("onclick", "add_multiple_choice(" + id  + ")");
+        object_to_insert.appendChild(label);
+        object_to_insert.appendChild(button);
+
+
+
+    }
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Create new test</h2>
+            <form id="test_creation">
+
+            </form>
+        </div>
+    </div>
+    <button class="btn btn-outline-warning" onclick="insert_new_question()">Insert new question</button>
+    <br>
+    <br>
+    <div class="submission-button">
+        <button class="submit btn btn-outline-warning" onclick="submit_test()">Submit the test</button>
+    </div>
+    <script>
+        function submit_test() {
+            document.getElementById("test_creation").submit();
+        }
+    </script>
+</div>
+{% endblock %}

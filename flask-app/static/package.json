@@ -1,0 +1,66 @@
+{
+  "name": "static",
+  "version": "1.0.0",
+  "dependencies": {
+  },
+  "question_1": {
+    "id": 1,
+    "category": "Algebra",
+    "choices": [
+      "1",
+      "2",
+      "2.25",
+      "3",
+      "8"
+    ],
+    "correct_choice": 0,
+    "instruction": "Solve for x",
+    "question": "$$10x - 2 = 8$$",
+    "topic": "Linear Equations"
+  },
+  "question_2": {
+    "id": 2,
+    "category": "Algebra",
+    "choices": [
+      "2.5",
+      "2",
+      "2.25",
+      "3",
+      "8"
+    ],
+    "correct_choice": 0,
+    "instruction": "Solve for x",
+    "question": "$$10 - 2x = 5$$",
+    "topic": "Linear Equations"
+  },
+  "question_3": {
+    "id": 3,
+    "category": "Algebra",
+    "choices": [
+      "1.5",
+      "2",
+      "2.5",
+      "2.25",
+      "2.75"
+    ],
+    "correct_choice": 2,
+    "instruction": "Solve for x",
+    "question": "$$\\frac{5}{x} = 2$$",
+    "topic": "Linear Equations"
+  },
+  "question_4": {
+    "id": 4,
+    "category": "Algebra",
+    "choices": [
+      "$$\\frac{8}{2}$$",
+      "$$\\frac{9}{2}$$",
+      "$$\\frac{8}{3}$$",
+      "$$\\frac{10}{3}$$",
+      "3"
+    ],
+    "correct_choice": 2,
+    "instruction": "Solve for x",
+    "question": "$$\\int_{0}^{2}x^2dx$$",
+    "topic": "Linear Equations"
+  }
+}

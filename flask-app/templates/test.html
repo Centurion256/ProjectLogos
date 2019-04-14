@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="main-body">
+    <div class="testing-form">
+        <div class="container">
+            <form action="/submit_test" method="post">
+                <ol>
+                    {{ answer }}
+                </ol>
+                {% if button %}
+                <button type="submit" class="btn btn-outline-warning"> Submit</button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
