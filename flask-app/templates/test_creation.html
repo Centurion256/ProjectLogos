@@ -23,7 +23,7 @@
         question.setAttribute("id", counter);
         question.setAttribute("class", "question_block");
         var id = counter;
-        question.innerHTML="<label class=\"question_field\" for=\"question_" + id + "\">Question " + id + ": </label><input type=\"text\" id=\"question_" + id + "\" name=\"question_0\">\n" +
+        question.innerHTML="<label class=\"question_field\" for=\"question_" + id + "\">Question " + id + ": </label><input type=\"text\" id=\"math-field\" name=\"question_0\">\n" +
             "                    <label for=\"task_" + id + "\">Task:</label><input type=\"text\" id=\"task_" + id + "\" name=\"task_0\">\n" +
             "                    <div id='choose_question_type_" + id + "'   class=\"question-type\">\n" +
             "                        <label> Type of the question:\n" +
@@ -111,11 +111,17 @@
 
     }
 </script>
+
+
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
             <h2>Create new test</h2>
             <form id="test_creation">
+                <span class="mathquill-editable">
+  <input type="text"/>
+                    <input type="test">
+</span>
 
             </form>
         </div>
@@ -126,6 +132,12 @@
     <div class="submission-button">
         <button class="submit btn btn-outline-warning" onclick="submit_test()">Submit the test</button>
     </div>
+    <script>
+        var MQ = MathQuill.getInterface(2);
+        $('.mathquill-editable').each(function() {
+            MQ.MathField(this);
+        });
+    </script>
     <script>
         function submit_test() {
             document.getElementById("test_creation").submit();

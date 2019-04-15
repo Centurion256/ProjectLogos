@@ -352,7 +352,7 @@ select {
 .submission-button button {
     font-size: 25px;
     padding: 5px;
-    color: #000000;
+    color: #555555;
     border-radius: 10px;
     border-width: 2px;
 }

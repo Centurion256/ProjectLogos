@@ -11,43 +11,39 @@
     </script>
 </head>
 <body>
-<p>Type math here: <span id="math-field"></span></p>
-<p>LaTeX of what you typed: <span id="latex"></span></p>
+<form>
+    <p>Type math here: <span id="math-field"></span></p>
+    <p>LaTeX of what you typed: <span id="latex"></span></p>
+</form>
 
 <script>
     var mathFieldSpan = document.getElementById('math-field');
-    var latexSpan = document.getElementById('latex');
 
     var MQ = MathQuill.getInterface(2); // for backcompat
-    var mathField = MQ.MathField(mathFieldSpan, {
+    MQ.MathField(mathFieldSpan, {
         spaceBehavesLikeTab: true, // configurable
-        handlers: {
-            edit: function () { // useful event handlers
-                latexSpan.textContent = mathField.latex(); // simple API
-            }
-        }
     });
 </script>
-<script type="text/javascript">
-    // setup some JSON to use
-    var tmp = document.getElementById("latex");
+<!--<script type="text/javascript">-->
+<!--// setup some JSON to use-->
+<!--var tmp = document.getElementById("latex");-->
 
-    window.onload = function () {
-        // setup the button click
-        document.getElementById("theButton").onclick = function () {
-            doWork()
-        };
-    };
+<!--window.onload = function () {-->
+<!--// setup the button click-->
+<!--document.getElementById("theButton").onclick = function () {-->
+<!--doWork()-->
+<!--};-->
+<!--};-->
 
-    function doWork() {
-        // ajax the JSON to the server
-        $.post("receiver", JSON.stringify(tmp.textContent), function () {
+<!--function doWork() {-->
+<!--// ajax the JSON to the server-->
+<!--$.post("receiver", JSON.stringify(tmp.textContent), function () {-->
 
-        });
-        // stop link reloading the page
-        event.preventDefault();
-    }
-</script>
+<!--});-->
+<!--// stop link reloading the page-->
+<!--event.preventDefault();-->
+<!--}-->
+<!--</script>-->
 This will send data using AJAX to Python:<br/><br/>
 <a href="" id="theButton">Click Me</a>
 
