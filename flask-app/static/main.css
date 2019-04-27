@@ -364,3 +364,19 @@ select {
 .question_block {
     margin-top: 70px;
 }
+
+.mathquill-editable {
+    width: 95%;
+    margin: 10px;
+    padding: 5px;
+    border: 1px solid #aaaaaa;
+    border-radius: 5px;
+}
+
+.mathquill-form {
+    width:95%;
+    border: 1px solid #aaa;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+}

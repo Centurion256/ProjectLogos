@@ -35,6 +35,12 @@ def submitting():
 def test_creation():
     return render_template("test_creation.html")
 
+@app.route("/creation_submission", methods=["POST"])
+def creation_submission():
+    for key in request.form:
+        print(key, request.form[key])
+    return render_template("index.html")
+
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

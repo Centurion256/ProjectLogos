@@ -14,6 +14,9 @@ def output():
 def worker():
     # read json + reply
     data = request.get_json(force=True)
+    print()
+    print(data)
+    print()
     with open("res.json", "w") as f:
         json.dump(data, f)
     return render_template("index.html")
