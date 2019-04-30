@@ -380,3 +380,11 @@ select {
     padding: 5px;
     border-radius: 5px;
 }
+
+.question-insert {
+    margin-top: 50px;
+}
+
+.create-test-title {
+    margin-top: 50px;
+}

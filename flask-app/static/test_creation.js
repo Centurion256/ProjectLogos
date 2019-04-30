@@ -21,11 +21,11 @@ function insert_new_question() {
     question.innerHTML = "<span class=\"question_field\">Question " + id + ": </span><br>" +
         "                    <div id='label_type_" + id + "'>\n" +
         "                        <label> Type of the question:\n" +
-        "                            <select name=\"type_" + id + "\" class=\"type_" + id + "\">\n" +
+        "                            <select name=\"type_" + id + "\" class=\"question_type type_" + id + "\">\n" +
         "\n" +
         "                                <option value=\"Multiple choice\">Multiple choice</option>\n" +
         "                                <option value=\"Written answer\">Written answer</option>\n" +
-        "                                <oprion value='Random question'>Random question</oprion>\n" +
+        "                                <option value='Random question'>Random question</option>\n" +
         "                            </select>\n" +
         "                        </label>\n" +
         "                        <button type=\"button\" id=\"button_submit_" + id + "\"  onclick=\"proceed_type(" + id + ")\">Proceed type</button>\n" +
@@ -94,6 +94,8 @@ function proceed_type(id) {
         proceed_multiple_choice(id);
     } else if (type == 'Written answer') {
         proceed_written_answer(id);
+    } else if (type == 'Random question') {
+        proceed_random_question(id);
     }
 }
 
@@ -121,7 +123,7 @@ function proceed_multiple_choice(id) {
     var input = document.createElement("INPUT");
     object_to_insert.innerHTML += "<br><label for='question_" + id + "'>Question</label><input name='question_" + id + "' id='question_" + id + "'>" +
         "                            <label for='task_" + id + "'>Task:</label><span class='mathquill-form' id='task_" + id + "'></span>" +
-        "<label for='number_of_choices_" + id + "' id='for_button_submit_number_" + id + "'>Number of choices: <select id='number_of_choices_" + id + "' name='number_of_choices_" + id + "'>" +
+        "<label for='number_of_choices_" + id + "' id='for_button_submit_number_" + id + "'>Number of choices: <select class='number_of_choices' id='number_of_choices_" + id + "' name='number_of_choices_" + id + "'>" +
         "<option>2</option>" +
         "<option>3</option>" +
         "<option>4</option>" +
@@ -145,16 +147,88 @@ function make_editable() {
 }
 
 function submit_form() {
+    if (document.getElementsByClassName("question_type").length != 0 || document.getElementsByClassName("number_of_choicesz").length != 0) {
+        alert("Some questions are not finished");
+        return;
+    }
     var res_json = {};
-    for (i = 0; i < form_items.length; i++) {
+    for (let i = 0; i < form_items.length; i++) {
         if (form_items[i] instanceof MQ.MathField) {
             let d = form_items[i].id;
-            res_json[$("[mathquill-block-id=" + d + "]")[0].parentNode.id] = form_items[i].latex();
+            let value = form_items[i].latex();
+            if (!value) {
+                alert("Some compulsory fields are not filled");
+                return;
+            }
+            res_json[$("[mathquill-block-id=" + d + "]")[0].parentNode.id] = value;
         } else {
             res_json[form_items[i].id] = form_items[i].value;
         }
     }
-    console.log(res_json);
+    $.post("creation_submission", res_json, function () {
+    });
 
+    window.onbeforeunload = function () {
+        return;
+    };
+    self.location = "/";
+}
 
+function proceed_random_question(id) {
+    var object_to_insert = document.getElementById(id);
+    object_to_insert.innerHTML += "<label for=\"select_topic_" + id + "\">Select topic: </label>\n" +
+        "                    <select id=\"select_topic_" + id + "\" name=\"select_topic_" + id + "\" onchange=\"make_subjects(this.id, 'select_subject_" + id + "')\">\n" +
+        "                        <option value=\"Arithmetic\">Arithmetic</option>\n" +
+        "                        <option value=\"Algebra\">Algebra</option>\n" +
+        "                        <option value=\"Calculus\">Calculus</option>\n" +
+        "                    </select>\n" +
+        "                    <label for=\"select_subject_" + id + "\">Select subject: </label>\n" +
+        "                    <select id=\"select_subject_" + id + "\" name=\"select_subject_" + id + "\">\n" +
+        "\n" +
+        "                    </select>"
+    make_subjects("select_topic_" + id, "select_subject_" + id);
+    form_items.push(document.getElementById("select_topic_" + id));
+    form_items.push(document.getElementById("select_subject_" + id));
+}
+
+function make_subjects(s1, s2) {
+    s1 = document.getElementById(s1);
+    s2 = document.getElementById(s2);
+    s2.innerHTML = "";
+    var options = [];
+    if (s1.value == "Algebra") {
+        options = ["Linear Equations",
+            "Equations Containing Radicals",
+            "Equations Containing Absolute Values",
+            "Quadratic Equations",
+            "Higher Order Polynomial Equations",
+            "Equations Involving Fractions",
+            "Exponential Equations",
+            "Logarithmic Equations",
+            "Trigonometric Equations",
+            "Matrices Equations"]
+    }
+    if (s1.value == "Arithmetic") {
+        options = ["Simple Arithmetic",
+            "Fraction Arithmetic",
+            "Exponent & Radicals Arithmetic",
+            "Simple Trigonometry",
+            "Matrices Arithmetic"]
+    }
+    if (s1.value == "Calculus") {
+        options = ["Polynomial Differentiation",
+            "Trigonometric Differentiation",
+            "Exponents Differentiation",
+            "Polynomial Integration",
+            "Trigonometric Integration",
+            "Exponents Integration",
+            "Polynomial Definite Integrals",
+            "Trigonometric Definite Integrals",
+            "Exponents Definite Integrals",
+            "First Order Differential Equations",
+            "Second Order Differential Equations"]
+    }
+    for (let option in options) {
+        s2.innerHTML += "<option value='" + options[option] + "'>" + options[option] + "</option>\n"
+    }
 }
