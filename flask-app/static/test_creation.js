@@ -38,6 +38,11 @@ function insert_new_question() {
     container_block.appendChild(question);
 }
 
+function sleep(ms) {
+ms += new Date().getTime();
+while (new Date() < ms){}
+}
+
 function add_multiple_choice(id) {
     var question_to_add;
     var number = document.getElementById("number_of_choices_" + id).value;
@@ -139,19 +144,21 @@ function proceed_multiple_choice(id) {
     }));
 }
 
-function make_editable() {
-    var MQ = MathQuill.getInterface(2);
-    $('.mathquill-editable').each(function () {
-        MQ.MathField(this);
-    });
-}
-
 function submit_form() {
+    console.log(form_items)
     if (document.getElementsByClassName("question_type").length != 0 || document.getElementsByClassName("number_of_choicesz").length != 0) {
         alert("Some questions are not finished");
         return;
     }
     var res_json = {};
+
+    var title = document.getElementById("title").value;
+    if (!title) {
+        alert("Title is not filled");
+        return;
+    }
+    res_json["title"] = title;
+    res_json["id"] = counter - 1;
     for (let i = 0; i < form_items.length; i++) {
         if (form_items[i] instanceof MQ.MathField) {
             let d = form_items[i].id;
@@ -167,11 +174,8 @@ function submit_form() {
     }
     $.post("creation_submission", res_json, function () {
     });
-
-    window.onbeforeunload = function () {
-        return;
-    };
     self.location = "/";
+
 }
 
 function proceed_random_question(id) {
@@ -185,10 +189,17 @@ function proceed_random_question(id) {
         "                    <label for=\"select_subject_" + id + "\">Select subject: </label>\n" +
         "                    <select id=\"select_subject_" + id + "\" name=\"select_subject_" + id + "\">\n" +
         "\n" +
-        "                    </select>"
+        "                    </select>\n" +
+        "                    <label for=\"select_difficulty_" + id + "\">Select difficulty: </label>" +
+        "                   <select name='select_difficulty_" + id + "' id='select_difficulty_" + id + "'>\n" +
+        "                    <option value='Beginner'>Beginner</option>" +
+        "                   <option value='Intermediate'>Intermediate</option>" +
+        "                   <option value='Advanced'>Advanced</option>" +
+        "</select>";
     make_subjects("select_topic_" + id, "select_subject_" + id);
     form_items.push(document.getElementById("select_topic_" + id));
     form_items.push(document.getElementById("select_subject_" + id));
+    form_items.push(document.getElementById("select_difficulty_" + id));
 }
 
 function make_subjects(s1, s2) {

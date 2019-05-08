@@ -1,6 +1,6 @@
 import os
 import re
-from regex_gen import ReplaceWords
+from my_modules.regex_gen import replace_words
 
 
 def mml2latex(mml):
@@ -23,7 +23,7 @@ schemaLocation="http://www.w3.org/1998/Math/MathML
     """
     # <math xmlns="http://www.w3.org/1998/Math/MathML">
     file = open("tmp.mml", "w", encoding='utf-8')
-    if re.match("<math.*?>.+?</math>", mml) == None:
+    if re.match("<math.*?>.+?</math>", mml) is None:
 
         mml = '<math xmlns="http://www.w3.org/1998/Math/MathML">{}</math>'.format(mml)
     else:
@@ -31,8 +31,8 @@ schemaLocation="http://www.w3.org/1998/Math/MathML
         mml = re.sub('<math.*?>', '<math xmlns="http://www.w3.org/1998/Math/MathML">', mml)
 
     # mml = mml.replace('&Integral;', '&#x222B;').replace('&DifferentialD;', '&#x2146;')
-    reorganized = ReplaceWords(mml)
+    reorganized = replace_words(mml)
     print(reorganized, file=file)
     file.close()
-    prompt = "xsltproc mathml_2_latex/mmltex.xsl " + "tmp.mml"
+    prompt = "xsltproc static/xsl/mmltex.xsl " + "tmp.mml"
     return os.popen(prompt).read()

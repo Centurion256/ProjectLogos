@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                {% for file in files %}
+                    <a href="/pass_test?filename={{ file }}.json">
+                        <div class="filename">
+                            {{ file }}
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

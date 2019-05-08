@@ -388,3 +388,57 @@ select {
 .create-test-title {
     margin-top: 50px;
 }
+
+#title_label {
+    padding-top: 30px;
+    text-align: center;
+    width: 100%;
+    font-size: 25px;
+}
+body {
+    min-height: 100vh;
+}
+
+.main_content {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.submission-message {
+    text-align: center;
+    padding-top:30vh;
+}
+
+.success {
+    color: #5cd853;
+}
+
+.fail {
+    color: #d82532
+}
+
+.filename {
+    height: 75px;
+    line-height: 75px;
+    padding-left: 30px;
+    font-size: 30px;
+    background-color: #dddddd;
+    width: 100%;
+}
+
+a .filename {
+    color: #5cd853;
+    margin-top: 10px;
+    border-radius: 30px;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:hover .filename {
+    color: #7cf873;
+    text-decoration: none;
+    background-color: #eeeeee
+}
