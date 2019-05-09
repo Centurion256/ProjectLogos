@@ -1,0 +1,49 @@
+
+\documentclass[a4paper,12pt]{exam}
+    
+    \usepackage{amsmath}
+    \usepackage{amssymb}
+    \usepackage{hyperref}
+    \usepackage{relsize}
+    \usepackage{commath}
+    \usepackage{setspace}
+    \usepackage{dsfont}
+    \usepackage{ragged2e}
+    \usepackage{enumitem}
+    \usepackage[utf8x]{inputenc}
+    \usepackage[ukrainian]{babel}
+    \usepackage[left=1cm, right=1cm, top=2cm, bottom=2cm]{geometry}
+
+\title{\textbf{\jvar{test.title}}}
+
+\begin{document}
+    
+\maketitle
+\doublespacing
+\pagenumbering{arabic}
+% Put your text here
+
+\jbegin{ for problem in test.problems \jend}
+
+    \large{\textbf{\jvar{loop.index}}} \jvar{problem.task}
+    \jvar{problem.problem}
+    \jbegin{ if problem.kind == "written_answer"\jend}
+
+        \framebox(500,200){}\\
+
+    \jbegin{ else \jend}
+        \indent{
+        \begin{enumerate}[label=\alph*.]
+
+            \jbegin{ for option in problem.choices \jend}
+                
+                \item \jvar{option}
+
+            \jbegin{ endfor \jend}
+
+        \end{enumerate}
+        }
+    \jbegin{ endif \jend}
+\jbegin{ endfor \jend}
+
+\end{document}
