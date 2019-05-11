@@ -53,8 +53,8 @@ class Problem():
     
 if __name__ == "__main__":
     
-    prob1 = Problem(r"\[\int\limits_0^\infty e^{-x^2}\]", task="Solve for x:", choices=[r"\[\frac{1}{2}$$", r"$$\phi\]", r"\[\sqrt{\pi}\]", r"I don't know"], right_answers=[2,3])
-    prob2 = Problem(r"\[\sum\limits_0^\infty \frac{1}{n^2}\]", task="Solve for x:", choices=[r"\[\frac{1}{2}\]", r"\[ \frac{6}{\pi^2}\]", r"\[\sqrt{\pi}\]", r"I don't know"], right_answers=[1])
+    prob1 = Problem(r"$\int\limits_0^\infty e^{-x^2}$", task="Solve for x:", choices=[r"$\frac{1}{2}$", r"$\phi$", r"$\sqrt{\pi}$", r"I don't know"], right_answers=[2,3])
+    prob2 = Problem(r"$\sum\limits_{n=0}^\infty \frac{1}{n^2}$", task="Solve for x:", choices=[r"$\frac{1}{2}$", r"$ \frac{\pi^2}{6}$", r"$\sqrt{\pi}$", r"I don't know"], right_answers=[1])
     prob3 = Problem(r"Lorem Ipsum...", task="Continue the text:", kind="written_answer")
     tst = Test('Hello, World!', [prob1, prob2, prob3])
     tst.to_pdf()
