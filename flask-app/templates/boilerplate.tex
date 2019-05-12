@@ -1,0 +1,58 @@
+\documentclass[addpoints,12pt]{exam}
+    
+    \usepackage{amsmath}
+    \usepackage{amssymb}
+    \usepackage{hyperref}
+    \usepackage{relsize}
+    \usepackage{commath}
+    \usepackage{setspace}
+    \usepackage{dsfont}
+    \usepackage{ragged2e}
+    \usepackage{enumitem}
+    \usepackage[utf8x]{inputenc}
+    \usepackage[ukrainian]{babel}
+    \usepackage[left=1cm, right=1cm, top=2cm, bottom=2cm]{geometry}
+
+\title{\textbf{\jvar{test.title}}}
+\everymath{\displaystyle}
+%\date{}
+\begin{document}
+    
+\maketitle
+\doublespacing
+\pagenumbering{arabic}
+\begin{center}
+\makebox[\textwidth]{Name:\enspace\hrulefill}
+\vspace{0.2in}
+\makebox[\textwidth]{Option:\enspace\hrulefill}
+\vspace{0.2in}
+\end{center}
+% Here's a loop that inserts all the questions into the test.
+\begin{questions}
+\jbegin{ for problem in test.problems \jend}
+    
+    \filbreak
+    \question \jvar{problem.task}
+    \jvar{problem.problem}
+
+    \jbegin{ if problem.kind == "written_answer"\jend}
+
+        \bigskip\fillwithgrid{2in}
+
+    \jbegin{ else \jend}
+
+        \begin{checkboxes}
+
+            \jbegin{ for option in problem.choices \jend}
+                
+                \choice \jvar{option}
+
+            \jbegin{ endfor \jend}
+
+        \end{checkboxes}
+    \jbegin{ endif \jend}
+    \vspace{0.2in}
+
+\jbegin{ endfor \jend}
+\end{questions}
+\end{document}
