@@ -1,6 +1,9 @@
 import random
 import ctypes
 import requests
+import tempfile
+import jinja2
+from jinja2 import Template
 import os
 import re
 
@@ -42,7 +45,29 @@ class Test:
         (Test) -> None
         Save test to pdf file
         """
-        pass
+        LatexEnv = jinja2.Environment(
+            block_start_string='\jbegin{',
+            block_end_string='\jend}',
+            variable_start_string='\jvar{',
+            variable_end_string='}',
+            comment_start_string='\#{',
+            comment_end_string='}',
+            line_statement_prefix='%%',
+            line_comment_prefix='%#',
+            trim_blocks=True,
+            autoescape=False,
+            loader=jinja2.FileSystemLoader(os.path.abspath('../templates'))
+        )
+        boilerplate = LatexEnv.get_template('boilerplate.tex')
+        latex = boilerplate.render(test = self)
+        with tempfile.TemporaryDirectory() as tmpdirname:
+
+            with open(f"{tmpdirname}/ltx{self.key}.tex", 'w') as tempf:
+
+                tempf.write(latex)
+
+            os.system(f'pdflatex -output-directory {tmpdirname} ltx{self.key}.tex')
+
 
     def to_aiken(self):
         """
