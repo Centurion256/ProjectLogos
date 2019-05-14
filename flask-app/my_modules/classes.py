@@ -6,11 +6,33 @@ import re
 
 
 class Test:
+    question_template = """
+    <li>
+       <div class="question" id="{}">
+           <h4>{}</h4>
+               <p class="task">$$ {} $$</p>
+               {}
+       </div>
+    </li>"""
+
+    answer_option = """
+    <label class="question-container">$$ {} $$
+        <input type="checkbox" name="{}" id="{}">
+        <span class="checkmark"></span>
+    </label>
+    """
+
+    written_answer_template = """
+    <span class="mathquill-form" id="{}"></span>
+    <script>written_answers.push(MQ.MathField(document.getElementById("{}")));</script>
+    """
+
     def __init__(self, title=""):
         self.key = "".join([str(random.randrange(9)) for _ in range(16)])
         self._problems = []
         self.number_of_choices = 0
         self.title = title
+        self.password = None
 
     def add_problem(self, problem):
         self._problems.append(problem)
@@ -29,13 +51,6 @@ class Test:
         """
         pass
 
-    def to_html(self):
-        """
-        (Test) -> str
-        :return: html representation of test
-        """
-        pass
-
     def to_json(self, path):
         """
         Save to json file in given path
@@ -46,13 +61,42 @@ class Test:
         filename = self.key + "_" + self.title + ".json"
         while filename in os.listdir(path):
             self.key = "".join([str(random.randrange(9)) for _ in range(16)])
+            filename = self.key + "_" + self.title + ".json"
         with open(path + filename, 'w') as file:
-            file.write("{")
+            file.write("{\n")
+            file.write('"title": "{}",\n'.format(self.title))
+            if not self.password:
+                file.write('"password_required": false,\n')
+            else:
+                file.write('"password_required": true,\n')
+                file.write('"password": {},\n'.format(self.password))
             for i in range(len(self._problems)):
                 file.write('"question_{}": '.format(i + 1) + self._problems[i].to_json(i + 1))
                 if i != len(self._problems) - 1:
                     file.write(",\n")
             file.write("}")
+
+    @staticmethod
+    def to_html(test_json):
+        res = ""
+        i = 1
+        while "question_" + str(i) in test_json:
+            current_question = test_json["question_" + str(i)]
+            if "choices" in current_question:
+                # if type of the question is multiple choice
+                choices = []
+                counter = 0
+                for choice in current_question["choices"]:
+                    choices.append(Test.answer_option.format(choice, "answer_{}_{}".format(str(i), counter), "answer_" + str(i)))
+                    counter += 1
+                answer_area = "\n".join(choices)
+            else:
+                # if type of the question is written answer:
+                answer_area = Test.written_answer_template.format("answer_" + str(i), "answer_" + str(i))
+            res += Test.question_template.format(i, current_question["question"], current_question["task"],
+                                                 answer_area)
+            i += 1
+        return res
 
 
 class Receiver:
@@ -78,7 +122,7 @@ class Receiver:
     def get_problem_from_dict(self, problem):
         """
         (dict) -> Problem
-        :param problem: dict representation of the problem
+        :param problem: dict representation of the poblem
         :return:Problem object
         """
         pass
@@ -143,9 +187,9 @@ class Problem:
         """
         Change all mathml options to latex
         """
-        self.task = Receiver.mml2latex(self.task)
+        self.task = Receiver.mml2latex(self.task).strip("$")
         for i in range(len(self.choices)):
-            self.choices[i] = Receiver.mml2latex(self.choices[i])
+            self.choices[i] = Receiver.mml2latex(self.choices[i]).strip("$")
 
     def to_json(self, problem_id):
         res = '{\n' + \
@@ -161,3 +205,22 @@ class Problem:
             res += '"right_answers": [\n' + ",\n".join(
                 ['"' + str(answer) + '"' for answer in self.right_answers]) + "]\n"
         return res + "\n}"
+
+    def replace_conflicting_characters(self):
+        self.task = self.task.replace("\\", "\\\\")
+        choices = ctypes.py_object * len(self.choices)
+        choices = choices()
+        for i in range(len(self.choices)):
+            if isinstance(self.choices[i], str):
+                choices[i] = self.choices[i].replace("\\", "\\\\")
+            else:
+                choices[i] = self.choices[i]
+
+        answers = set()
+        for answer in self.right_answers:
+            if isinstance(answer, str):
+                answers.add(answer.replace("\\", "\\\\"))
+            else:
+                answers.add(answer)
+        self.right_answers = answers
+        self.choices = choices

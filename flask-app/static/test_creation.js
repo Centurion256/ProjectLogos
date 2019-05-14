@@ -11,13 +11,17 @@ proceeded = [];
 form_items = [];
 
 function insert_new_question() {
-    var question;
-    var container_block;
+    if (counter > 50) {
+        alert("Too many questions are created");
+        return;
+    }
+    let question;
+    let container_block;
 
     question = document.createElement('div');
     question.setAttribute("id", counter);
     question.setAttribute("class", "question_block");
-    var id = counter;
+    let id = counter;
     question.innerHTML = "<span class=\"question_field\">Question " + id + ": </span><br>" +
         "                    <div id='label_type_" + id + "'>\n" +
         "                        <label> Type of the question:\n" +
@@ -38,14 +42,9 @@ function insert_new_question() {
     container_block.appendChild(question);
 }
 
-function sleep(ms) {
-ms += new Date().getTime();
-while (new Date() < ms){}
-}
-
 function add_multiple_choice(id) {
-    var question_to_add;
-    var number = document.getElementById("number_of_choices_" + id).value;
+    let question_to_add;
+    let number = document.getElementById("number_of_choices_" + id).value;
     if (number < 2 || number > 6) {
         alert("Only numbers from 2 to 6 are accepted");
         event.preventDefault();
@@ -54,11 +53,11 @@ function add_multiple_choice(id) {
 
     question_to_add = document.getElementById(id);
 
-    var par = document.createElement("p");
+    let par = document.createElement("p");
     par.appendChild(document.createTextNode("Enter answer variants: "));
     question_to_add.appendChild(par);
     for (let i = 0; i < number; i++) {
-        var span = document.createElement("span");
+        let span = document.createElement("span");
         span.setAttribute("class", "mathquill-form");
         span.setAttribute("id", "question_" + id + "_" + (i + 1));
         question_to_add.appendChild(span);
@@ -70,7 +69,7 @@ function add_multiple_choice(id) {
     par = document.createElement("p");
     par.appendChild(document.createTextNode("Number of right answer: "));
     question_to_add.appendChild(par);
-    var select_right = document.createElement("select");
+    let select_right = document.createElement("select");
     select_right.setAttribute("id", "right_answer_" + id);
     for (let i = 0; i < number; i++) {
         let option = document.createElement("option");
@@ -81,8 +80,8 @@ function add_multiple_choice(id) {
     form_items.push(document.getElementById("right_answer_" + id));
 
 
-    var button_submit = document.getElementById("button_submit_number_" + id);
-    var input_number_field = document.getElementById("for_button_submit_number_" + id);
+    let button_submit = document.getElementById("button_submit_number_" + id);
+    let input_number_field = document.getElementById("for_button_submit_number_" + id);
     question_to_add.removeChild(button_submit);
     question_to_add.removeChild(input_number_field);
 
@@ -90,32 +89,31 @@ function add_multiple_choice(id) {
 
 function proceed_type(id) {
 
-    var field_to_get_type = document.getElementsByName("type_" + id)[0];
-    var current_question = document.getElementById(id);
-    var field_to_delete = document.getElementById("label_type_" + id);
-    var type = field_to_get_type.value;
+    let field_to_get_type = document.getElementsByName("type_" + id)[0];
+    let current_question = document.getElementById(id);
+    let field_to_delete = document.getElementById("label_type_" + id);
+    let type = field_to_get_type.value;
     current_question.removeChild(field_to_delete);
-    if (type == 'Multiple choice') {
+    if (type === 'Multiple choice') {
         proceed_multiple_choice(id);
-    } else if (type == 'Written answer') {
+    } else if (type === 'Written answer') {
         proceed_written_answer(id);
-    } else if (type == 'Random question') {
+    } else if (type === 'Random question') {
         proceed_random_question(id);
     }
 }
 
 function proceed_written_answer(id) {
-    var object_to_insert = document.getElementById(id);
+    let object_to_insert = document.getElementById(id);
     object_to_insert.innerHTML += "<br><label for='question_" + id + "'>Question</label><input name='question_" + id + "' id='question_" + id + "'>" +
         "                            <label for='task_" + id + "'>Task:</label><span class='mathquill-form' id='task_" + id + "'></span>" +
         "                            <label for='answer_" + id + "'>Right answer: </label>" +
         "<span class='mathquill-form' id='answer_" + id + "'></span>\n";
 
-
     form_items.push(document.getElementById('question_' + id));
-    var editable = ["task_" + id, "answer_" + id];
-    for (var edit = 0; edit < editable.length; edit++) {
-        var mathFieldSpan = document.getElementById(editable[edit]);
+    let editable = ["task_" + id, "answer_" + id];
+    for (let edit = 0; edit < editable.length; edit++) {
+        let mathFieldSpan = document.getElementById(editable[edit]);
         form_items.push(MQ.MathField(mathFieldSpan, {
             spaceBehavesLikeTab: false,
             autoOperatorNames: 'sin cos tan',
@@ -124,8 +122,8 @@ function proceed_written_answer(id) {
 }
 
 function proceed_multiple_choice(id) {
-    var object_to_insert = document.getElementById(id);
-    var input = document.createElement("INPUT");
+    let object_to_insert = document.getElementById(id);
+    document.createElement("INPUT");
     object_to_insert.innerHTML += "<br><label for='question_" + id + "'>Question</label><input name='question_" + id + "' id='question_" + id + "'>" +
         "                            <label for='task_" + id + "'>Task:</label><span class='mathquill-form' id='task_" + id + "'></span>" +
         "<label for='number_of_choices_" + id + "' id='for_button_submit_number_" + id + "'>Number of choices: <select class='number_of_choices' id='number_of_choices_" + id + "' name='number_of_choices_" + id + "'>" +
@@ -145,14 +143,14 @@ function proceed_multiple_choice(id) {
 }
 
 function submit_form() {
-    console.log(form_items)
-    if (document.getElementsByClassName("question_type").length != 0 || document.getElementsByClassName("number_of_choicesz").length != 0) {
+    console.log(form_items);
+    if (document.getElementsByClassName("question_type").length !== 0 || document.getElementsByClassName("number_of_choicesz").length !== 0) {
         alert("Some questions are not finished");
         return;
     }
-    var res_json = {};
+    let res_json = {};
 
-    var title = document.getElementById("title").value;
+    let title = document.getElementById("title").value;
     if (!title) {
         alert("Title is not filled");
         return;
@@ -172,6 +170,7 @@ function submit_form() {
             res_json[form_items[i].id] = form_items[i].value;
         }
     }
+    form_items.length = 0;
     $.post("creation_submission", res_json, function () {
     });
     self.location = "/";
@@ -179,7 +178,7 @@ function submit_form() {
 }
 
 function proceed_random_question(id) {
-    var object_to_insert = document.getElementById(id);
+    let object_to_insert = document.getElementById(id);
     object_to_insert.innerHTML += "<label for=\"select_topic_" + id + "\">Select topic: </label>\n" +
         "                    <select id=\"select_topic_" + id + "\" name=\"select_topic_" + id + "\" onchange=\"make_subjects(this.id, 'select_subject_" + id + "')\">\n" +
         "                        <option value=\"Arithmetic\">Arithmetic</option>\n" +
@@ -206,8 +205,8 @@ function make_subjects(s1, s2) {
     s1 = document.getElementById(s1);
     s2 = document.getElementById(s2);
     s2.innerHTML = "";
-    var options = [];
-    if (s1.value == "Algebra") {
+    let options = [];
+    if (s1.value === "Algebra") {
         options = ["Linear Equations",
             "Equations Containing Radicals",
             "Equations Containing Absolute Values",
@@ -219,14 +218,14 @@ function make_subjects(s1, s2) {
             "Trigonometric Equations",
             "Matrices Equations"]
     }
-    if (s1.value == "Arithmetic") {
-        options = ["Simple Arithmetic",
+    if (s1.value === "Arithmetic") {
+        options = ["Simple Arithmetic", // simple
             "Fraction Arithmetic",
             "Exponent & Radicals Arithmetic",
             "Simple Trigonometry",
             "Matrices Arithmetic"]
     }
-    if (s1.value == "Calculus") {
+    if (s1.value === "Calculus") {
         options = ["Polynomial Differentiation",
             "Trigonometric Differentiation",
             "Exponents Differentiation",

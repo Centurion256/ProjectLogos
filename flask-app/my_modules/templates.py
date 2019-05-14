@@ -26,11 +26,11 @@ wrong_solved_answer = solved_answer.replace("checkmark", "checkmark-disabled che
 right_solved_answer = solved_answer.replace("checkmark", "checkmark-disabled chechmark-disabled-right")
 
 
-def make_question(id, question, task, variants):
+def make_question(identifier, question, task, variants):
     answers = []
     for i in range(len(variants)):
         answers.append(answer.format(variants[i], "{}-{}".format(id, i)))
-    return question_template.format(id, question, task, "\n".join(answers))
+    return question_template.format(identifier, question, task, "\n".join(answers))
 
 
 def make_solved(question, task, variants, right_variants, answered):

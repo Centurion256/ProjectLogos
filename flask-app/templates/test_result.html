@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block body %}
+    <script type="text/javascript">
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+    </script>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 test-results">
+                <h2>{{ title }}</h2>
+                <ol class="results">
+                    {{ results }}
+                </ol>
+                <div class="grade">
+                    Your grade is {{ grade }}/{{ tasks_num }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

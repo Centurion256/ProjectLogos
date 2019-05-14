@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block body %}
+    <script src="/static/test_passing.js"></script>
+    <div class="main-body">
+        <div class="test_passing">
+            <h2 id="title">Title</h2>`
+            <div class="container">
+                <form action="/submit_test" id="test_passing_form" method="post">
+                    <ol>
+                        <li>
+                            <div class="question-res">hello</div>
+                            <p class="task-res">ome mathjax</p>
+                            <span class="right">Your answer is right</span><br>
+                            <span class="wrong">Your answer is wrong</span>
+                            <p class="user-answer-res">Your answer is $$ more math $$</p>
+                            <p class="right-answer-res">Right answer was not math</p>
+                        </li>
+                    </ol>
+                </form>
+                <button class="btn btn-outline-warning" onclick="check_test()">Submit</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

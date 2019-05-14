@@ -1,8 +1,14 @@
 {% extends "layout.html" %}
 {% block body %}
-    <div class="container">
+    <div class="container ">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10 tests-list">
+                <button class="btn btn-outline-warning button-test-creation"
+                        onclick="window.location.href = '/create_test';">
+                    Create new test <i class="fas fa-feather-alt"></i>
+                </button>
+                <div class="divider-grey"></div>
                 {% for file in files %}
                     <a href="/pass_test?filename={{ file }}.json">
                         <div class="filename">
@@ -11,6 +17,7 @@
                     </a>
                 {% endfor %}
             </div>
+        <div class="col-sm-1"></div>
         </div>
     </div>
 
