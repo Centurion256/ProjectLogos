@@ -13,11 +13,12 @@
                     <a href="/pass_test?filename={{ file }}.json">
                         <div class="filename">
                             {{ file }}
+                            <span class="to_pdf"><a class="to_pdf_link" href="/download_pdf/{{ file }}">PDF <i class="far fa-file-pdf"></i></a></span>
                         </div>
                     </a>
                 {% endfor %}
             </div>
-        <div class="col-sm-1"></div>
+            <div class="col-sm-1"></div>
         </div>
     </div>
 

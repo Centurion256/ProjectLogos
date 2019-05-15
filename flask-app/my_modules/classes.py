@@ -3,7 +3,6 @@ import ctypes
 import requests
 import tempfile
 import jinja2
-from jinja2 import Template
 import os
 import re
 
@@ -31,6 +30,10 @@ class Test:
     """
 
     def __init__(self, title=""):
+        """
+        Initialixetion of the Test object
+        :param title: title of the test
+        """
         self.key = "".join([str(random.randrange(9)) for _ in range(16)])
         self._problems = []
         self.number_of_choices = 0
@@ -38,6 +41,12 @@ class Test:
         self.password = None
 
     def add_problem(self, problem):
+        """
+        (Test, Problem) -> None
+        :param problem: object of class Problem that will be added to the test
+
+        Add the problem to the test
+        """
         self._problems.append(problem)
 
     def to_pdf(self):
@@ -56,18 +65,16 @@ class Test:
             line_comment_prefix='%#',
             trim_blocks=True,
             autoescape=False,
-            loader=jinja2.FileSystemLoader(os.path.abspath('../templates'))
+            loader=jinja2.FileSystemLoader(os.path.abspath('../templates/'))
         )
-        boilerplate = LatexEnv.get_template('boilerplate.tex')
-        latex = boilerplate.render(test = self)
+
+        boilerplate = LatexEnv.from_string(open('templates/boilerplate.tex').read())
+        latex = boilerplate.render(test=self)
         with tempfile.TemporaryDirectory() as tmpdirname:
-
             with open(f"{tmpdirname}/ltx{self.key}.tex", 'w') as tempf:
-
                 tempf.write(latex)
 
             os.system(f'pdflatex -output-directory {tmpdirname} ltx{self.key}.tex')
-
 
     def to_aiken(self):
         """
@@ -78,6 +85,7 @@ class Test:
 
     def to_json(self, path):
         """
+        (Test, str) -> None
         Save to json file in given path
         """
         path = os.path.abspath(path)
@@ -103,6 +111,11 @@ class Test:
 
     @staticmethod
     def to_html(test_json):
+        """
+        (dict) -> str
+        :param test_json: json object containing test description
+        :return: html representation of the test
+        """
         res = ""
         i = 1
         while "question_" + str(i) in test_json:
@@ -112,7 +125,8 @@ class Test:
                 choices = []
                 counter = 0
                 for choice in current_question["choices"]:
-                    choices.append(Test.answer_option.format(choice, "answer_{}_{}".format(str(i), counter), "answer_" + str(i)))
+                    choices.append(
+                        Test.answer_option.format(choice, "answer_{}_{}".format(str(i), counter), "answer_" + str(i)))
                     counter += 1
                 answer_area = "\n".join(choices)
             else:
@@ -122,6 +136,35 @@ class Test:
                                                  answer_area)
             i += 1
         return res
+
+    @classmethod
+    def from_json(cls, json):
+        """
+        (class, dict) -> Test
+        :param json: dict containing test representation
+        :return: Test object built from that dict
+        """
+        test = Test()
+        test.title = json["title"]
+        for i in range(1, 51):
+            if "question_" + str(i) not in json:
+                break
+            current_problem = json[f"question_{str(i)}"]
+            current_problem.pop("id")
+            current_problem["problem"] = current_problem["question"]
+            current_problem.pop("question")
+            if current_problem["kind"] == "multiple_choice":
+                test._problems.append(Problem(**json["question_" + str(i)]))
+            else:
+                new_problem = {}
+                for key in ["task", "kind"]:
+                    new_problem[key] = current_problem[key]
+                new_problem = Problem(**new_problem)
+                new_problem.right_answers = set(current_problem["right_choice"])
+                test._problems.append(new_problem)
+        for i in test._problems:
+            print(i)
+        return test
 
 
 class Receiver:
@@ -144,20 +187,14 @@ class Receiver:
         result.to_latex()
         return result
 
-    def get_problem_from_dict(self, problem):
-        """
-        (dict) -> Problem
-        :param problem: dict representation of the poblem
-        :return:Problem object
-        """
-        pass
-
     @staticmethod
     def mml2latex(mml):
         """
         (str) -> str
         :param mml: mml code in str representation
         :return: string of LaTeX code
+
+        Convert string in MathML format to LaTeX format
         """
         prefix = """
         <!DOCTYPE mml:math 
@@ -188,16 +225,32 @@ class Receiver:
         return os.popen(prompt).read()
 
     @staticmethod
-    def replace_words(strin):
+    def replace_words(string):
+        """
+        (str) -> str
+        :param string: string the words will be replaced in
+        :return: string with replaced words
+
+        Replace some words to avoid problem in test converting into different typrs
+        """
         transcriber = {'&ExponentialE;': '&#x2147;', '&Integral;': '&#x222B;', '&DifferentialD;': '&#x2146;'}
         for symbol in transcriber:
-            strin = re.sub(symbol, transcriber[symbol], strin)
+            string = re.sub(symbol, transcriber[symbol], string)
 
-        return strin
+        return string
 
 
 class Problem:
     def __init__(self, problem="", task="", kind="", choices=(), right_answers=()):
+        """
+        (Problem, str, str, str, tuple. tuple)
+        initialization method
+        :param problem: Problem statement
+        :param task: task to be solved
+        :param kind: kind of the problem
+        :param choices: available choices
+        :param right_answers: right_answers for the problem
+        """
         self.right_answers = set(right_answers)
         self.problem = problem
         self.task = task
@@ -210,21 +263,26 @@ class Problem:
 
     def to_latex(self):
         """
-        Change all mathml options to latex
+        Change all MathML options to latex
         """
         self.task = Receiver.mml2latex(self.task).strip("$")
         for i in range(len(self.choices)):
             self.choices[i] = Receiver.mml2latex(self.choices[i]).strip("$")
 
     def to_json(self, problem_id):
+        """
+        (Problem, str) -> str
+        :param problem_id: id of the problem
+        return json representation of the problem
+        """
         res = '{\n' + \
-              '"id": {},\n'.format('"' + str(problem_id) + '"') + \
-              '"question": {},\n'.format('"' + self.problem + '"') + \
-              '"task": {},\n'.format('"' + self.task + '"') + \
-              '"kind": {},\n'.format('"' + self.kind + '"')
+              f'"id": "{problem_id}",\n' + \
+              f'"question": "{self.problem}",\n' + \
+              f'"task": "{self.task}",\n' + \
+              f'"kind": "{self.kind}",\n'
 
         if self.kind == "written_answer":
-            res += '"right_choice": {}\n'.format('"' + self.right_answers.pop() + '"')
+            res += f'"right_choice": "{self.right_answers.pop()}"\n'
         elif self.kind == "multiple_choice":
             res += '"choices": [\n' + ",\n".join(['"' + choice + '"' for choice in self.choices]) + "],\n"
             res += '"right_answers": [\n' + ",\n".join(
@@ -232,6 +290,10 @@ class Problem:
         return res + "\n}"
 
     def replace_conflicting_characters(self):
+        """
+        (Problem) -> None
+        replace backslash in test with double backslash for avoiding conflicts with writing .json file
+        """
         self.task = self.task.replace("\\", "\\\\")
         choices = ctypes.py_object * len(self.choices)
         choices = choices()

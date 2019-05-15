@@ -5,7 +5,11 @@
         window.onpopstate = function () {
             history.go(1);
         };
+        window.onbeforeunload = function () {
+            return "Do you really want to leave our brilliant application?";
+        };
     </script>
+
     <div class="container">
         <div class="row">
             <div class="col-sm-12 test-results">

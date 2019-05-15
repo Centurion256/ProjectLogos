@@ -1,0 +1,15 @@
+{
+"title": "helo",
+"password_required": false,
+"question_1": {
+"id": "1",
+"question": "d",
+"task": "d",
+"kind": "multiple_choice",
+"choices": [
+"hello",
+"hello"],
+"right_answers": [
+"0"]
+
+}}

@@ -170,8 +170,10 @@ h4 {
 }
 
 .bank-account .account-number {
-    background-color: #667;
-    color: #fff;
+    background-color: #dddddd;
+    min-height: 50px;
+    line-height: 50px;
+    border-radius: 20px;
 }
 
 .btn-outline-warning:hover {
@@ -442,6 +444,7 @@ a {
 }
 
 a:hover {
+    color: #efb102;
     text-decoration: none;
 }
 
@@ -526,4 +529,21 @@ a:hover .filename {
     font-size: 50px;
     margin-top: 30px;
     background-color: #eeeeee;
+    border-radius: 10px;
+}
+
+.to_pdf {
+    float: right;
+}
+
+.to_pdf_link {
+    float: right;
+}
+
+.error {
+    color: #d82532;
+    font-weight: 100;
+    text-align: center;
+    margin-top: 200px;
+    font-size: 50px;
 }
