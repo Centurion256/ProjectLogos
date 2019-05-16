@@ -423,7 +423,7 @@ body {
 }
 
 .filename {
-    height: 50px;
+    min-height: 50px;
     line-height: 50px;
     font-size: 22px;
     text-align: left;
@@ -546,4 +546,35 @@ a:hover .filename {
     text-align: center;
     margin-top: 200px;
     font-size: 50px;
+}
+
+.test_name {
+    display: inline-block;
+    white-space: nowrap;
+    width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.password {
+    width: 70%;
+}
+
+.password_enter {
+    padding-top: 28vh;
+    text-align: center;
+    font-weight: 100;
+    font-family: "Roboto";
+    font-size: 23px;
+}
+
+.password_enter label {
+    margin-right: 20px;
+}
+
+.password_enter input {
+    width: 50%;
+    border: 1px solid #aaaaaa;
+    padding: 5px;
+    border-radius: 5px;
 }

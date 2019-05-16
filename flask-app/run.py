@@ -1,6 +1,7 @@
 import random
 import json
-from flask import Flask, render_template, Markup, request, session, redirect, jsonify
+import tempfile
+from flask import Flask, render_template, Markup, request, session, redirect, jsonify, send_file
 from my_modules.classes import Receiver, Problem, Test
 from hashlib import sha1
 
@@ -20,8 +21,12 @@ def download_pdf(filename):
         return render_template("error.html", error="You cannot access other directories, little hacker")
     test_json = json.load(open("static/tests/" + filename + ".json"))
     test = Test.from_json(test_json)
-    test.to_pdf()
-    return render_template("index.html")
+    print("Creating temp file")
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        print(tmpdirname)
+        print("EKFEKKEKEF")
+        test.to_pdf(tmpdirname)
+        return send_file(f"{tmpdirname}/ltx{test.key}.pdf")
 
 
 @app.route("/test_results")
@@ -125,10 +130,8 @@ def pass_test():
 def check_password():
     password = request.form['password']
     password = sha1(bytes(password, 'utf-8')).hexdigest()
-    print(password, session["right_password"], password == session["right_password"])
     if password == session["right_password"]:
         session["entered_password"] = True
-    print(session)
     return redirect("/pass_test")
 
 
@@ -173,6 +176,10 @@ def creation_submission():
         return render_template("error.html", error="Title too long")
     test.title = request.form["title"].lower().strip().strip("./,").replace("'", "").replace('"', "").replace(" ",
                                                                                                               '_')
+
+    if "password_input" in request.form:
+        test.password = sha1(bytes(request.form["password_input"], 'utf-8')).hexdigest()
+
     # iterate through all the passed questions
     for i in range(1, int(request.form["id"]) + 1):
         question = Problem()
@@ -181,7 +188,7 @@ def creation_submission():
             question.kind = "written_answer"
             question.problem = request.form["question_" + str(i)]
             question.task = request.form["task_" + str(i)]
-            question.right_answers = set(request.form["answer_" + str(i)])
+            question.right_answers = {request.form["answer_" + str(i)]}
 
         elif "select_topic_" + str(i) in request.form:
             # if the type of answer is random question
@@ -217,11 +224,10 @@ def creation_submission():
                 else:
                     break
             question.choices = tuple(choices)
-        question.replace_conflicting_characters()
+        # question.replace_conflicting_characters()
         test.add_problem(question)
 
     # save the test id to the session and save the test to json file
-    session['test_id'] = test.key
     test.to_json("static/tests/")
 
     # save the name of the json file to tests_list.txt where names of all the present tests are stored
@@ -233,6 +239,12 @@ def creation_submission():
     file.close()
 
     return render_template("index.html")
+
+
+# @app.errorhandler(Exception)
+# def all_exception_handler(error):
+#     print(error)
+#     return redirect("/")
 
 
 if __name__ == "__main__":

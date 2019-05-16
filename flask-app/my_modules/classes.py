@@ -1,13 +1,16 @@
 import random
 import ctypes
 import requests
-import tempfile
 import jinja2
+import json
 import os
 import re
 
 
 class Test:
+    """
+    Class for representing the whole test
+    """
     question_template = """
     <li>
        <div class="question" id="{}">
@@ -49,11 +52,12 @@ class Test:
         """
         self._problems.append(problem)
 
-    def to_pdf(self):
+    def to_pdf(self, tmpdirname):
         """
         (Test) -> None
         Save test to pdf file
         """
+        # create jinja environment
         LatexEnv = jinja2.Environment(
             block_start_string='\jbegin{',
             block_end_string='\jend}',
@@ -68,46 +72,49 @@ class Test:
             loader=jinja2.FileSystemLoader(os.path.abspath('../templates/'))
         )
 
+        # render LaTeX template
         boilerplate = LatexEnv.from_string(open('templates/boilerplate.tex').read())
         latex = boilerplate.render(test=self)
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            with open(f"{tmpdirname}/ltx{self.key}.tex", 'w') as tempf:
-                tempf.write(latex)
+        with open(f"{tmpdirname}/ltx{self.key}.tex", 'w') as tempf:
+            tempf.write(latex)
 
-            os.system(f'pdflatex -output-directory {tmpdirname} ltx{self.key}.tex')
+        # convert LaTeX file to PDF
+        os.system(f'pdflatex -halt-on-error -output-directory {tmpdirname} ltx{self.key}.tex')
 
     def to_aiken(self):
         """
         (Test) -> str
         :return: test in aiken format
         """
+        # TODO: implement this
         pass
 
     def to_json(self, path):
         """
         (Test, str) -> None
-        Save to json file in given path
+        Save test to .json file in given directory
+
+        :param path: path of the directory to save file in
         """
         path = os.path.abspath(path)
         if not path.endswith("/"):
             path += "/"
         filename = self.key + "_" + self.title + ".json"
-        while filename in os.listdir(path):
-            self.key = "".join([str(random.randrange(9)) for _ in range(16)])
-            filename = self.key + "_" + self.title + ".json"
         with open(path + filename, 'w') as file:
-            file.write("{\n")
-            file.write('"title": "{}",\n'.format(self.title))
-            if not self.password:
-                file.write('"password_required": false,\n')
+
+            res = {"title": self.title}
+            if self.password is None:
+                res['password_required'] = False
             else:
-                file.write('"password_required": true,\n')
-                file.write('"password": {},\n'.format(self.password))
+                res['password_required'] = True
+                res['password'] = self.password
+
             for i in range(len(self._problems)):
-                file.write('"question_{}": '.format(i + 1) + self._problems[i].to_json(i + 1))
-                if i != len(self._problems) - 1:
-                    file.write(",\n")
-            file.write("}")
+                problem_dict = self._problems[i].to_dict(i + 1)
+                res[f'question_{i + 1}'] = problem_dict
+            res = json.dumps(res, indent=4, ensure_ascii=False)
+
+            file.write(res)
 
     @staticmethod
     def to_html(test_json):
@@ -120,7 +127,7 @@ class Test:
         i = 1
         while "question_" + str(i) in test_json:
             current_question = test_json["question_" + str(i)]
-            if "choices" in current_question:
+            if current_question["kind"] == "multiple_choice":
                 # if type of the question is multiple choice
                 choices = []
                 counter = 0
@@ -162,8 +169,6 @@ class Test:
                 new_problem = Problem(**new_problem)
                 new_problem.right_answers = set(current_problem["right_choice"])
                 test._problems.append(new_problem)
-        for i in test._problems:
-            print(i)
         return test
 
 
@@ -211,10 +216,8 @@ class Receiver:
         # <math xmlns="http://www.w3.org/1998/Math/MathML">
         file = open("tmp.mml", "w", encoding='utf-8')
         if re.match("<math.*?>.+?</math>", mml) is None:
-
             mml = '<math xmlns="http://www.w3.org/1998/Math/MathML">{}</math>'.format(mml)
         else:
-
             mml = re.sub('<math.*?>', '<math xmlns="http://www.w3.org/1998/Math/MathML">', mml)
 
         # mml = mml.replace('&Integral;', '&#x222B;').replace('&DifferentialD;', '&#x2146;')
@@ -269,25 +272,24 @@ class Problem:
         for i in range(len(self.choices)):
             self.choices[i] = Receiver.mml2latex(self.choices[i]).strip("$")
 
-    def to_json(self, problem_id):
+    def to_dict(self, problem_id):
         """
-        (Problem, str) -> str
-        :param problem_id: id of the problem
-        return json representation of the problem
+        (Problem, int) -> dict
+        :param problem_id: id of the current problem
+        :return: dict representation of the current problem
         """
-        res = '{\n' + \
-              f'"id": "{problem_id}",\n' + \
-              f'"question": "{self.problem}",\n' + \
-              f'"task": "{self.task}",\n' + \
-              f'"kind": "{self.kind}",\n'
 
+        # A better version of to_json() function.
+        res = {key if key != 'problem' else 'question': self.__dict__[key] for key in self.__dict__}
+        res["right_answers"] = tuple(res["right_answers"])
+        res["choices"] = tuple(res["choices"])
+        res['id'] = problem_id
         if self.kind == "written_answer":
-            res += f'"right_choice": "{self.right_answers.pop()}"\n'
-        elif self.kind == "multiple_choice":
-            res += '"choices": [\n' + ",\n".join(['"' + choice + '"' for choice in self.choices]) + "],\n"
-            res += '"right_answers": [\n' + ",\n".join(
-                ['"' + str(answer) + '"' for answer in self.right_answers]) + "]\n"
-        return res + "\n}"
+            res['right_choice'] = self.right_answers.pop()
+        else:
+            res['right_answers'] = [str(answer) for answer in self.right_answers]
+        # json.dumps(res, indent=4, ensure_ascii=False)
+        return res
 
     def replace_conflicting_characters(self):
         """

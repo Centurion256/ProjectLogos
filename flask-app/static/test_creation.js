@@ -139,10 +139,12 @@ function proceed_multiple_choice(id) {
         "</select></label>" +
         "<button id='button_submit_number_" + id + "' onclick='add_multiple_choice(" + id + ")'>Submit</button>";
 
+    alert();
     form_items.push(document.getElementById('question_' + id));
     form_items.push(MQ.MathField(document.getElementById("task_" + id), {
         spaceBehavesLikeTab: false,
-        autoOperatorNames: 'sin cos tan int',
+        autoOperatorNames: 'sin cos tan',
+        autoCommands: 'int sum sqrt pi infty infinity integral'
     }));
 }
 
@@ -150,7 +152,7 @@ function submit_form() {
     // submit the form and send all the information to python function
 
     // check if there are some not completed problems
-    if (document.getElementsByClassName("question_type").length !== 0 || document.getElementsByClassName("number_of_choicesz").length !== 0) {
+    if (document.getElementsByClassName("question_type").length !== 0 || document.getElementsByClassName("number_of_choices").length !== 0) {
         alert("Some questions are not finished");
         return;
     }
@@ -161,6 +163,19 @@ function submit_form() {
         alert("Title is not filled");
         return;
     }
+    if (title.length > 30) {
+        alert("Title is too long");
+        return;
+    }
+    let password = document.getElementById("password_input");
+    if (password && password.value.length < 6){
+        alert("Minimum password length is 6 characters");
+        return;
+    }
+    if (password){
+        form_items.push(password);
+    }
+
     res_json["title"] = title;
     res_json["id"] = counter - 1;
 
@@ -215,6 +230,23 @@ function proceed_random_question(id) {
     form_items.push(document.getElementById("select_difficulty_" + id));
 }
 
+function edit_password_prompt() {
+    let password_required = document.getElementById("password_required").value;
+    let password_div = document.getElementById("request_password");
+    try {
+        let password_prompt = document.getElementById("password");
+        password_div.removeChild(password_prompt);
+    } catch {
+    }
+    if (password_required === "True") {
+        password_div.innerHTML += "<span id=\"password\">\n" +
+            "                        <label for=\"password_input\">Password: </label><input type=\"text\" name=\"password\"\n" +
+            "                                                                             id=\"password_input\">\n" +
+            "                        </span>";
+    }
+}
+
+
 function make_subjects(s1, s2) {
     // change subject options in depending what the topic is selected
     s1 = document.getElementById(s1);
@@ -226,7 +258,7 @@ function make_subjects(s1, s2) {
             "Equations Containing Radicals",
             "Equations Containing Absolute Values",
             "Quadratic Equations",
-            "Higher Order Polynomial Equations",
+            "HigherOrder Polynomial Equations",
             "Equations Involving Fractions",
             "Exponential Equations",
             "Logarithmic Equations",
@@ -234,11 +266,11 @@ function make_subjects(s1, s2) {
             "Matrices Equations"]
     }
     if (s1.value === "Arithmetic") {
-        options = ["Simple Arithmetic", // simple
-            "Fraction Arithmetic",
-            "Exponent & Radicals Arithmetic",
+        options = ["Simple",
+            "Fractions",
+            "Exponents and Radicals",
             "Simple Trigonometry",
-            "Matrices Arithmetic"]
+            "Matrices"]
     }
     if (s1.value === "Calculus") {
         options = ["Polynomial Differentiation",

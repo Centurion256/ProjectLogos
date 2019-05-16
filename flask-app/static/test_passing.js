@@ -19,8 +19,8 @@ function check_test() {
     res_data["filename"] = document.getElementById("title").innerHTML;
     let response = $.post("submit_test", res_data, function () {
     });
-    console.log(response);
-    window.location.href = "/test_results";
+    setTimeout(function() {window.location.href = "/test_results";}, 2000);
+
 }
 
 function getFormData($form) {

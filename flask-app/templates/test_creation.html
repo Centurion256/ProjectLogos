@@ -1,20 +1,35 @@
 {% extends "layout.html" %}
 {% block body %}
-<script src="/static/test_creation.js"></script>
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12">
-            <h2 class="create-test-title">Create new test</h2>
-            <form id="test_creation">
-                <label for="title" id="title_label">Enter the test title</label><input type="text" id="title">
-            </form>
+    <script src="/static/test_creation.js"></script>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="create-test-title">Create new test</h2>
+                <form id="test_creation">
+                    <div id="request_password">
+                        <label for="password_required">Is password required: </label>
+                        <select name="password_required"
+                                id="password_required" onchange="edit_password_prompt()">
+                            <option value="True">Yes</option>
+                            <option value="False">No</option>
+                        </select>
+                        <br>
+                        <span id="password">
+                        <label for="password_input">Password: </label><input type="text" name="password"
+                                                                             id="password_input">
+                        </span>
+
+                    </div>
+                    <label for="title" id="title_label">Enter the test title</label><input type="text" id="title">
+                </form>
+            </div>
+        </div>
+        <button class="question-insert btn btn-outline-warning" onclick="insert_new_question()">Insert new question
+        </button>
+        <br>
+        <br>
+        <div class="submission-button">
+            <button class="submit btn btn-outline-warning" onclick="submit_form()">Submit the test</button>
         </div>
     </div>
-    <button class="question-insert btn btn-outline-warning" onclick="insert_new_question()">Insert new question</button>
-    <br>
-    <br>
-    <div class="submission-button">
-        <button class="submit btn btn-outline-warning" onclick="submit_form()">Submit the test</button>
-    </div>
-</div>
 {% endblock %}
