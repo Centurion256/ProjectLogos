@@ -24,3 +24,8 @@ WIP/mathml_2_latex/mmltex.xsl
 WIP/mathml_2_latex/scripts.xsl
 WIP/mathml_2_latex/tables.xsl
 WIP/mathml_2_latex/tokens.xsl
+Makefile
+make.bat
+index.rst
+conf.py
+_build

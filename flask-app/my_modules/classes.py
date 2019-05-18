@@ -8,9 +8,7 @@ import re
 
 
 class Test:
-    """
-    Class for representing the whole test
-    """
+    """Class for representing the whole test"""
     question_template = """
     <li>
        <div class="question" id="{}">
@@ -44,18 +42,19 @@ class Test:
         self.password = None
 
     def add_problem(self, problem):
-        """
-        (Test, Problem) -> None
+        """Add the problem to the test
+
         :param problem: object of class Problem that will be added to the test
 
-        Add the problem to the test
         """
         self._problems.append(problem)
 
     def to_pdf(self, tmpdirname):
-        """
-        (Test) -> None
+        """(Test) -> None
         Save test to pdf file
+
+        :param tmpdirname: 
+
         """
         # create jinja environment
         LatexEnv = jinja2.Environment(
@@ -81,20 +80,12 @@ class Test:
         # convert LaTeX file to PDF
         os.system(f'pdflatex -halt-on-error -output-directory {tmpdirname} ltx{self.key}.tex')
 
-    def to_aiken(self):
-        """
-        (Test) -> str
-        :return: test in aiken format
-        """
-        # TODO: implement this
-        pass
-
     def to_json(self, path):
-        """
-        (Test, str) -> None
+        """(Test, str) -> None
         Save test to .json file in given directory
 
         :param path: path of the directory to save file in
+
         """
         path = os.path.abspath(path)
         if not path.endswith("/"):
@@ -118,10 +109,11 @@ class Test:
 
     @staticmethod
     def to_html(test_json):
-        """
-        (dict) -> str
+        """(dict) -> str
+
         :param test_json: json object containing test description
-        :return: html representation of the test
+        :returns: html representation of the test
+
         """
         res = ""
         i = 1
@@ -146,10 +138,11 @@ class Test:
 
     @classmethod
     def from_json(cls, json):
-        """
-        (class, dict) -> Test
+        """(class, dict) -> Test
+
         :param json: dict containing test representation
-        :return: Test object built from that dict
+        :returns: Test object built from that dict
+
         """
         test = Test()
         test.title = json["title"]
@@ -173,13 +166,16 @@ class Test:
 
 
 class Receiver:
+    """ A class that represents a Math.ly problem receiver."""
+
     def get_random_problem(self, area, topic, difficulty=None):
-        """
-        (str, str, str) -> Problem
+        """(str, str, str) -> Problem
+
         :param area: area of the problem(e.g. 'algebra')
         :param topic: topic of the problem (e.g. 'linear-equations')
-        :param difficulty: difficulty(beginner, intermediate, advanced)
-        :return: a Problem object of current problem
+        :param difficulty: difficulty(beginner, intermediate, advanced) (Default value = None)
+        :returns: a Problem object of current problem
+
         """
         basic_url = "https://math.ly/api/v1/"
         basic_url += area + "/" + topic + ".json"
@@ -194,12 +190,13 @@ class Receiver:
 
     @staticmethod
     def mml2latex(mml):
-        """
-        (str) -> str
-        :param mml: mml code in str representation
-        :return: string of LaTeX code
+        """(str) -> str
 
+        :param mml: mml code in str representation
+        :returns: string of LaTeX code
+        
         Convert string in MathML format to LaTeX format
+
         """
         prefix = """
         <!DOCTYPE mml:math 
@@ -229,12 +226,13 @@ class Receiver:
 
     @staticmethod
     def replace_words(string):
-        """
-        (str) -> str
-        :param string: string the words will be replaced in
-        :return: string with replaced words
+        """(str) -> str
 
+        :param string: string the words will be replaced in
+        :returns: string with replaced words
+        
         Replace some words to avoid problem in test converting into different typrs
+
         """
         transcriber = {'&ExponentialE;': '&#x2147;', '&Integral;': '&#x222B;', '&DifferentialD;': '&#x2146;'}
         for symbol in transcriber:
@@ -244,15 +242,18 @@ class Receiver:
 
 
 class Problem:
+    """A class that represents a separate problem."""
+
     def __init__(self, problem="", task="", kind="", choices=(), right_answers=()):
-        """
-        (Problem, str, str, str, tuple. tuple)
-        initialization method
+        """(Problem, str, str, str, tuple. tuple)
+            initialization method
+
         :param problem: Problem statement
         :param task: task to be solved
         :param kind: kind of the problem
         :param choices: available choices
         :param right_answers: right_answers for the problem
+
         """
         self.right_answers = set(right_answers)
         self.problem = problem
@@ -265,18 +266,17 @@ class Problem:
             self.choices[i] = choices[i]
 
     def to_latex(self):
-        """
-        Change all MathML options to latex
-        """
+        """Change all MathML options to latex"""
         self.task = Receiver.mml2latex(self.task).strip("$")
         for i in range(len(self.choices)):
             self.choices[i] = Receiver.mml2latex(self.choices[i]).strip("$")
 
     def to_dict(self, problem_id):
-        """
-        (Problem, int) -> dict
+        """(Problem, int) -> dict
+
         :param problem_id: id of the current problem
-        :return: dict representation of the current problem
+        :returns: dict representation of the current problem
+
         """
 
         # A better version of to_json() function.
@@ -292,8 +292,7 @@ class Problem:
         return res
 
     def replace_conflicting_characters(self):
-        """
-        (Problem) -> None
+        """(Problem) -> None
         replace backslash in test with double backslash for avoiding conflicts with writing .json file
         """
         self.task = self.task.replace("\\", "\\\\")
