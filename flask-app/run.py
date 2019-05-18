@@ -21,12 +21,14 @@ def download_pdf(filename):
         return render_template("error.html", error="You cannot access other directories, little hacker")
     test_json = json.load(open("static/tests/" + filename + ".json"))
     test = Test.from_json(test_json)
-    print("Creating temp file")
     with tempfile.TemporaryDirectory() as tmpdirname:
-        print(tmpdirname)
-        print("EKFEKKEKEF")
         test.to_pdf(tmpdirname)
         return send_file(f"{tmpdirname}/ltx{test.key}.pdf")
+
+
+@app.route("/manual")
+def manual():
+    return render_template("manual.html")
 
 
 @app.route("/test_results")
@@ -135,11 +137,6 @@ def check_password():
     return redirect("/pass_test")
 
 
-@app.route("/donate")
-def donate():
-    return render_template("donate.html")
-
-
 @app.route("/pass")
 def test_pass():
     files = open("static/tests/tests_list.txt").readlines()
@@ -201,9 +198,8 @@ def creation_submission():
                 try:
                     if j == 4:
                         session.clear()
-                        session["success"] = False
-                        session["message"] = "Problems with retrieving random problem"
-                        return render_template("submission_result.html", success="success", message="message")
+
+                        break
                     problem = receiver.get_random_problem(topic, subject, difficulty)
                     problem.kind = "multiple_choice"
                     question = problem
@@ -241,10 +237,10 @@ def creation_submission():
     return render_template("index.html")
 
 
-# @app.errorhandler(Exception)
-# def all_exception_handler(error):
-#     print(error)
-#     return redirect("/")
+@app.errorhandler(Exception)
+def all_exception_handler(error):
+    print(error)
+    return redirect("/")
 
 
 if __name__ == "__main__":

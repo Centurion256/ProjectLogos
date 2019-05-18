@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 manual">
+                <h2>User manual for math prompt</h2>
+                <p>Here are some commands to write in fields with math prompt enabled</p>
+                <ul>
+                    <li><span class="character">∫</span> - type "int"</li>
+                    <li><span class="character">∑</span> - type "sum"</li>
+                    <li><span class="character">√</span> - type "sqrt"</li>
+                    <li><span class="character">π</span> - type "pi"</li>
+                    <li><span class="character">∞</span> - type "infty" or "infinity"</li>
+                    <li>Type "^" for making sup</li>
+                    <li>Type "_" for making sub</li>
+                    <li>Type "\text" + space for writing text in area fields with math prompt</li>
+                </ul>
+                <br>
+                <p>If you have questions about more complicated structures, you can type in LaTeX</p>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

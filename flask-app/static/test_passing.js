@@ -19,7 +19,9 @@ function check_test() {
     res_data["filename"] = document.getElementById("title").innerHTML;
     let response = $.post("submit_test", res_data, function () {
     });
-    setTimeout(function() {window.location.href = "/test_results";}, 2000);
+    setTimeout(function () {
+        window.location.href = "/test_results";
+    }, 1300);
 
 }
 

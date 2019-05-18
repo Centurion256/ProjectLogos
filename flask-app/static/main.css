@@ -578,3 +578,28 @@ a:hover .filename {
     padding: 5px;
     border-radius: 5px;
 }
+
+.service-container:hover {
+    color: white;
+}
+
+.character {
+    font-size: 30px;
+}
+
+.manual {
+    padding-top: 100px;
+}
+
+.manual p {
+    margin: 40px 0;
+    text-align: left;
+    font-size: 30px;
+    font-weight: 100;
+    color: #666666;
+}
+
+.manual li {
+    margin-top: 30px;
+    color: #666666;
+}

@@ -65,6 +65,7 @@ function add_multiple_choice(id) {
         form_items.push(MQ.MathField(document.getElementById("question_" + id + "_" + (i + 1)), {
             spaceBehavesLikeTab: false,
             autoOperatorNames: 'sin cos tan',
+            autoCommands: 'int sum sqrt pi infty infinity integral'
         }));
     }
     par = document.createElement("p");
@@ -120,6 +121,7 @@ function proceed_written_answer(id) {
         form_items.push(MQ.MathField(mathFieldSpan, {
             spaceBehavesLikeTab: false,
             autoOperatorNames: 'sin cos tan',
+            autoCommands: 'int sum sqrt pi infty infinity integral'
         }));
     }
 }
@@ -139,7 +141,6 @@ function proceed_multiple_choice(id) {
         "</select></label>" +
         "<button id='button_submit_number_" + id + "' onclick='add_multiple_choice(" + id + ")'>Submit</button>";
 
-    alert();
     form_items.push(document.getElementById('question_' + id));
     form_items.push(MQ.MathField(document.getElementById("task_" + id), {
         spaceBehavesLikeTab: false,
@@ -215,14 +216,14 @@ function proceed_random_question(id) {
         "                        <option value=\"Calculus\">Calculus</option>\n" +
         "                    </select>\n" +
         "                    <label for=\"select_subject_" + id + "\">Select subject: </label>\n" +
-        "                    <select id=\"select_subject_" + id + "\" name=\"select_subject_" + id + "\">\n" +
+        "                    <select onchange=\"make_difficulties(this.id, 'select_difficulty_" + id + "')\" id=\"select_subject_" + id + "\" name=\"select_subject_" + id + "\">\n" +
         "\n" +
         "                    </select>\n" +
         "                    <label for=\"select_difficulty_" + id + "\">Select difficulty: </label>" +
         "                   <select name='select_difficulty_" + id + "' id='select_difficulty_" + id + "'>\n" +
-        "                    <option value='Beginner'>Beginner</option>" +
-        "                   <option value='Intermediate'>Intermediate</option>" +
-        "                   <option value='Advanced'>Advanced</option>" +
+        "                    <option value='beginner'>beginner</option>" +
+        "                   <option value='intermediate'>intermediate</option>" +
+        "                   <option value='advanced'>advanced</option>" +
         "</select>";
     make_subjects("select_topic_" + id, "select_subject_" + id);
     form_items.push(document.getElementById("select_topic_" + id));
@@ -287,5 +288,29 @@ function make_subjects(s1, s2) {
     }
     for (let option in options) {
         s2.innerHTML += "<option value='" + options[option] + "'>" + options[option] + "</option>\n"
+    }
+}
+
+function make_difficulties(subject, difficulty) {
+    subject = document.getElementById(subject).value;
+    difficulty = document.getElementById(difficulty);
+    difficulty.innerHTML = "";
+    let difficulties = [];
+    console.log(subject);
+    if (["Exponents Definite Integrals", "Trigonometric Definite Integrals", "Trigonometric Integration", "Trigonometric Differentiation", "Exponents and Radicals", "Simple Trigonometry", "Quadratic Equations", "Exponential Equations", "Trigonometric Equations"].includes(subject)) {
+        difficulties = ["advanced"];
+    } else if (["Matrices"].includes(subject)) {
+        difficulties = ["advanced"];
+    } else if (["HigherOrder Polynomial Equations", "Equations Involving Fractions"].includes(subject)) {
+        difficulties = ["advanced", "intermediate"];
+    } else if (["Logarithmic Equations"].includes(subject)) {
+        difficulties = ["advanced", "beginner"];
+    } else if (["Matrices Equations", "Exponents Differentiation", "Exponents Integration"].includes(subject)) {
+        difficulties = ["beginner"];
+    } else {
+        difficulties = ["beginner", "intermediate", "advanced"];
+    }
+    for (let option in difficulties) {
+        difficulty.innerHTML += "<option value='" + difficulties[option] + "'>" + difficulties[option] + "</option>\n"
     }
 }

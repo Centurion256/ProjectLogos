@@ -32,7 +32,7 @@ class Test:
 
     def __init__(self, title=""):
         """
-        Initialixetion of the Test object
+        Initialization of the Test object
         :param title: title of the test
         """
         self.key = "".join([str(random.randrange(9)) for _ in range(16)])
@@ -90,10 +90,14 @@ class Test:
         path = os.path.abspath(path)
         if not path.endswith("/"):
             path += "/"
+
+        # make filename for output json file
         filename = self.key + "_" + self.title + ".json"
         with open(path + filename, 'w') as file:
 
             res = {"title": self.title}
+
+            # check if password is required for the test
             if self.password is None:
                 res['password_required'] = False
             else:
@@ -198,19 +202,6 @@ class Receiver:
         Convert string in MathML format to LaTeX format
 
         """
-        prefix = """
-        <!DOCTYPE mml:math 
-        PUBLIC "-//W3C//DTD MathML 2.0//EN"
-               "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd" [
-        <!ENTITY % MATHML.prefixed "INCLUDE">
-        <!ENTITY % MATHML.prefix "mml">
-    ]>
-    <math xmlns="http://www.w3.org/1998/Math/MathML"
-    xsi="http://www.w3.org/2001/XMLSchema-instance"
-    schemaLocation="http://www.w3.org/1998/Math/MathML
-        http://www.w3.org/Math/XMLSchema/mathml2/mathml2.xsd"> 
-        """
-        # <math xmlns="http://www.w3.org/1998/Math/MathML">
         file = open("tmp.mml", "w", encoding='utf-8')
         if re.match("<math.*?>.+?</math>", mml) is None:
             mml = '<math xmlns="http://www.w3.org/1998/Math/MathML">{}</math>'.format(mml)
@@ -259,10 +250,9 @@ class Problem:
         self.problem = problem
         self.task = task
         self.kind = kind
-        self.answer_amount = len(choices)
-        self.choices = ctypes.py_object * self.answer_amount
+        self.choices = ctypes.py_object * len(choices)
         self.choices = self.choices()
-        for i in range(self.answer_amount):
+        for i in range(len(choices)):
             self.choices[i] = choices[i]
 
     def to_latex(self):
@@ -288,27 +278,4 @@ class Problem:
             res['right_choice'] = self.right_answers.pop()
         else:
             res['right_answers'] = [str(answer) for answer in self.right_answers]
-        # json.dumps(res, indent=4, ensure_ascii=False)
         return res
-
-    def replace_conflicting_characters(self):
-        """(Problem) -> None
-        replace backslash in test with double backslash for avoiding conflicts with writing .json file
-        """
-        self.task = self.task.replace("\\", "\\\\")
-        choices = ctypes.py_object * len(self.choices)
-        choices = choices()
-        for i in range(len(self.choices)):
-            if isinstance(self.choices[i], str):
-                choices[i] = self.choices[i].replace("\\", "\\\\")
-            else:
-                choices[i] = self.choices[i]
-
-        answers = set()
-        for answer in self.right_answers:
-            if isinstance(answer, str):
-                answers.add(answer.replace("\\", "\\\\"))
-            else:
-                answers.add(answer)
-        self.right_answers = answers
-        self.choices = choices
