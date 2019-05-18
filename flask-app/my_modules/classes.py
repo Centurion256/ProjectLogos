@@ -186,7 +186,8 @@ class Receiver:
         if difficulty:
             basic_url += "?difficulty=" + difficulty
         res = requests.get(basic_url).json()
-        choices = [i.replace('<math>', '<math xmlns="http://www.w3.org/1998/Math/MathML">') for i in res["choices"]]
+        choices = [re.sub("</math>, <math>", ", ", choice) for choice in res["choices"]]
+        choices = [i.replace('<math>', '<math xmlns="http://www.w3.org/1998/Math/MathML">') for i in choices]
         question = '<math xmlns="http://www.w3.org/1998/Math/MathML">' + res["question"] + '</math>'
         result = Problem(res['instruction'], question, "multiple_choice", choices, [res["correct_choice"]])
         result.to_latex()
