@@ -33,3 +33,7 @@ make.bat
 index.rst
 conf.py
 _build
+invoke.tex
+Dockerfile
+texlive.profile
+texlive_small.profile

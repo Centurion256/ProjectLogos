@@ -161,7 +161,7 @@ class Test:
                 test._problems.append(Problem(**json["question_" + str(i)]))
             else:
                 new_problem = {}
-                for key in ["task", "kind"]:
+                for key in ["task", "kind", "problem"]:
                     new_problem[key] = current_problem[key]
                 new_problem = Problem(**new_problem)
                 new_problem.right_answers = set(current_problem["right_choice"])
