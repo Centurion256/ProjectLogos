@@ -18,3 +18,6 @@ No matter if you're a teacher, a student or just an enthusiast, you can make use
 
 ## Contributing
 Since this project was first created as an assignment for the CS course, you can't contribute until it is considered to be finished in terms of the assignment(until the end of May 2019). Afterwards, you can contribute to it if you wish.
+
+## Deploying
+A Docker image is available at https://hub.docker.com/r/centurion256/project-logos.
